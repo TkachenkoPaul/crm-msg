@@ -24,6 +24,7 @@
         <div class="card-body">
             <p class="login-box-msg">Введите учетные данные</p>
             <p class="login-box-msg">Новая строка</p>
+            <p class="login-box-msg">Еще одна новая строка</p>
 
             <form method="POST"  action="{{ route('login') }}">
                 @csrf
