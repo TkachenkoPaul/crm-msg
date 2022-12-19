@@ -77,33 +77,33 @@ class User extends Authenticatable
     public function opened()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','0');
+            ->where('messages.status_id','=','0');
     }
 
     public function done()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','1');
+            ->where('messages.status_id','=','1');
     }
     public function closed()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','2');
+            ->where('messages.status_id','=','2');
     }
     public function edit()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','3');
+            ->where('messages.status_id','=','3');
     }
     public function plan()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','4');
+            ->where('messages.status_id','=','4');
     }
      public function paid()
     {
         return $this->hasMany(Messages::class,'responsible_id','id')
-            ->where('messages.messages.status_id','=','5');
+            ->where('messages.status_id','=','5');
     }
 
 }

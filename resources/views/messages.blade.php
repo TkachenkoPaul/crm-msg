@@ -66,13 +66,13 @@
                                 </div>
                             </div>
 
-                            <table class="table table-bordered  compact stripe table-hover yajra-datatable">
+                            <table class="table table-bordered table-hover compact yajra-datatable" id="datatables-1">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th data-priority="3">ФИО</th>
                                         <th data-priority="1">Адрес</th>
-                                        <th data-priority="2">Дом/Квартира</th>
+                                        <th data-priority="2">№</th>
                                         {{-- <th data-priority="5">UID</th>
                                         <th data-priority="3">Договор</th>
                                         <th data-priority="4">Фото</th> --}}

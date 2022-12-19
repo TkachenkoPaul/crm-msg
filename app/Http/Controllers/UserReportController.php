@@ -30,7 +30,7 @@ class UserReportController extends Controller
                     'done' => function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
                     'edit' => function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
                     'plan' => function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
-		    'paid'=> function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
+		            'paid'=> function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
                 ]);
             } else {
                 $data['users'] = User::withCount(['opened','closed','done','edit','plan','paid']);

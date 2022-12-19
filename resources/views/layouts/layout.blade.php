@@ -7,7 +7,7 @@
     @include('layouts.styles')
 </head>
 
-<body class="hold-transition layout-fixed sidebar-mini sidebar-collapse tr">
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">
 
         <!-- Preloader -->

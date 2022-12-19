@@ -67,19 +67,19 @@ class MessagesController extends Controller
                 })
                 ->addColumn('options', function($row){
                     if (isset($row->uid)) {
-                        $uid = "<a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Tooltip on top\" class=\"btn btn-sm bg-success m-1 icon-tooltip\" ><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-success m-1\" ><i class=\"fas fa-satellite-dish\"></i></a>";
                     } else {
-                        $uid = "<a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Tooltip on top\" class=\"btn btn-sm bg-danger m-1 icon-tooltip\"><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-danger m-1\"><i class=\"fas fa-satellite-dish\"></i></a>";
                     }
                     if ($row->contract == 1) {
-                        $contract = "<a class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-file-contract\"></i></a>";
+                        $contract = "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-file-contract\"></i></a>";
                     }else {
-                        $contract = "<a class=\"btn btn-sm bg-danger m-1 icon-tooltip \"><i class=\"fas fa-file-contract\"></i></a>";
+                        $contract = "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-danger m-1 icon-tooltip \"><i class=\"fas fa-file-contract\"></i></a>";
                     }
                      if ($row->photo == 1) {
-                        $photo = "<a class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
+                        $photo = "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
                     } else{
-                        $photo = "<a class=\"btn btn-sm bg-danger m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
+                        $photo = "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-danger m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
                     }
                     $html = $uid.$contract.$photo;
                     return '<ul class="list-unstyled">'.$html.'</ul>';

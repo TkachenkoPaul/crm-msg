@@ -1,11 +1,11 @@
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+{{--<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>--}}
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-</script>
+{{--<script>--}}
+{{--    $.widget.bridge('uibutton', $.ui.button)--}}
+{{--</script>--}}
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
@@ -53,11 +53,11 @@
 
 <script type="text/javascript">
     $(function() {
-
+        $('[data-toggle="tooltip"]').tooltip()
         $(function () {
             bsCustomFileInput.init();
         });
-        $('.icon-tooltip').tooltip({})
+
         //Date range picker
         $('#reservation').daterangepicker({
             startDate: moment().startOf('month'),
@@ -142,6 +142,7 @@
                 }
 
             },
+            autoWidth:false,
             pagingType: 'simple',
             processing: true,
             serverSide: true,
@@ -151,7 +152,8 @@
             order: [
                 [0, 'desc']
             ],
-            columns: [{
+            columns: [
+                {
                     data: 'id',
                     name: 'm.id'
                 },
@@ -195,13 +197,14 @@
                     name: 'm.plan'
                 },
             ],
-            columnDefs: [{
+            columnDefs: [
+                {
                     targets: 0,
                     className: 'dt-body-center'
                 },
                 {
                     targets: 1,
-                    className: 'dt-body-justify'
+                    className: 'dt-body-center'
                 },
                 {
                     targets: 3,
@@ -225,7 +228,7 @@
                 },
                 {
                     targets: -3,
-                    className: 'dt-body-right',
+                    className: 'dt-body-center',
                 },
                 {
                     targets: -2,
@@ -237,7 +240,7 @@
                 },
 
             ],
-            fixedColumns: true
+
         });
         let userReport = $('.yajra-datatable-user-report').DataTable({
             language: {
@@ -268,7 +271,8 @@
             serverSide: true,
             responsive: true,
             ajax: "{{ $data['request-user-report'] ?? '' }}",
-            columns: [{
+            columns: [
+                {
                     data: 'id',
                     name: 'id',
                     orderable: true,
@@ -348,7 +352,8 @@
             serverSide: true,
             responsive: true,
             ajax: "{{ route('users.list') }}",
-            columns: [{
+            columns: [
+                {
                     data: 'id',
                     name: 'id',
                     orderable: true,
@@ -416,7 +421,8 @@
             serverSide: true,
             responsive: true,
             ajax: "{{ route('types.list') }}",
-            columns: [{
+            columns: [
+                {
                     data: 'id',
                     name: 'id'
                 },
@@ -473,7 +479,8 @@
             serverSide: true,
             responsive: true,
             ajax: "{{ route('status.list') }}",
-            columns: [{
+            columns: [
+                {
                     data: 'id',
                     name: 'id'
                 },
