@@ -19,10 +19,10 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="../../index2.html" class="h1"><b>{{ config('app.name') }}</b></a>
+            <a href="" class="h3"><b>{{ config('app.name') }}</b></a>
         </div>
         <div class="card-body">
-            <p class="login-box-msg">Войдите для доступу к заявкам</p>
+            <p class="login-box-msg">Введите учетные данные</p>
 
             <form method="POST"  action="{{ route('login') }}">
                 @csrf
@@ -34,7 +34,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="input-group mb-3">
                     <input type="password" id="password" name="password" required autocomplete="current-password" class="form-control" placeholder="Пароль">
                     <div class="input-group-append">
