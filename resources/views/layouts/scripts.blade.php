@@ -8,6 +8,7 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 
 <!-- DataTables  & Plugins -->
@@ -53,6 +54,10 @@
 <script type="text/javascript">
     $(function() {
 
+        $(function () {
+            bsCustomFileInput.init();
+        });
+        $('.icon-tooltip').tooltip({})
         //Date range picker
         $('#reservation').daterangepicker({
             startDate: moment().startOf('month'),
@@ -141,6 +146,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
+            lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Все"] ],
             ajax: "{{ $data['request'] ?? '' }}",
             order: [
                 [0, 'desc']

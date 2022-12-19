@@ -67,23 +67,21 @@ class MessagesController extends Controller
                 })
                 ->addColumn('options', function($row){
                     if (isset($row->uid)) {
-                        $uid = "<a class=\"btn btn-sm bg-success\"><i class=\"fas fa-check\"></i></a>";
+                        $uid = "<a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Tooltip on top\" class=\"btn btn-sm bg-success m-1 icon-tooltip\" ><i class=\"fas fa-satellite-dish\"></i></a>";
                     } else {
-                        $uid =  "<a class=\"btn btn-sm bg-danger\"><i class=\"fas fa-times\" style=\"font-size: 20px;\"></i></a>";
+                        $uid = "<a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Tooltip on top\" class=\"btn btn-sm bg-danger m-1 icon-tooltip\"><i class=\"fas fa-satellite-dish\"></i></a>";
                     }
                     if ($row->contract == 1) {
-                        $contract =  "<a class=\"btn btn-sm bg-success\"><i class=\"fas fa-check\"></i></a>";
+                        $contract = "<a class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-file-contract\"></i></a>";
                     }else {
-                        $contract =  "<a class=\"btn btn-sm bg-danger\"><i class=\"fas fa-times\" style=\"font-size: 20px;\"></i></a>";
+                        $contract = "<a class=\"btn btn-sm bg-danger m-1 icon-tooltip \"><i class=\"fas fa-file-contract\"></i></a>";
                     }
                      if ($row->photo == 1) {
-                        $photo =  "<a class=\"btn btn-sm bg-success\"><i class=\"fas fa-check\"></i></a>";
+                        $photo = "<a class=\"btn btn-sm bg-success m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
                     } else{
-                        $photo = "<a class=\"btn btn-sm bg-danger\"><i class=\"fas fa-times\" style=\"font-size: 20px;\"></i></a>";
+                        $photo = "<a class=\"btn btn-sm bg-danger m-1 icon-tooltip\"><i class=\"fas fa-images\"></i></a>";
                     }
-                    $html = '<li class="mb-3">ID - '.$uid.'</li>
-                            <li class="mb-3">Договор - '.$contract.'</li>
-                            <li class="mb-3">Фото - '.$photo.'</li>';
+                    $html = $uid.$contract.$photo;
                     return '<ul class="list-unstyled">'.$html.'</ul>';
                 })
                 ->editColumn('fio', function($row) {
@@ -183,7 +181,7 @@ class MessagesController extends Controller
         }
 	if((string)$request->status_id === "5"){
 		if(auth()->user()->id !== 1){
-			return redirect()->back()->with('message','Big ERROR!!!!!!!!!!');		
+			return redirect()->back()->with('message','Big ERROR!!!!!!!!!!');
 		}
 	}
         $message->update($request->validated());

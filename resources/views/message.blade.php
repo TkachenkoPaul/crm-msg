@@ -110,10 +110,19 @@
                                                             file</label>
                                                     </div>
                                                 </div> --}}
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label for="image" class="form-label">Фото материалы </label>--}}
+{{--                                                    <input class="form-control" type="file" id="image"--}}
+{{--                                                        name="images[]" multiple />--}}
+{{--                                                </div>--}}
                                                 <div class="form-group">
-                                                    <label for="image" class="form-label">Фото материалы </label>
-                                                    <input class="form-control" type="file" id="image"
-                                                        name="images[]" multiple />
+                                                    <label for="image">Файлы</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input name="images[]" multiple type="file" class="custom-file-input" id="image">
+                                                            <label class="custom-file-label" for="image">Выбрать файлы</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <button type="submit"
