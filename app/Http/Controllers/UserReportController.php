@@ -16,7 +16,7 @@ class UserReportController extends Controller
             } else {
                 $data['request-user-report'] =  route('user-report.list');
             }
-        return view('user-report',['users'=>User::withCount(['opened','closed','done','edit','plan','paid'])->get(),'data'=>$data ]);
+        return view('user-report',['users'=>User::withCount(['opened','closed','done','edit','plan','paid','checked'])->get(),'data'=>$data ]);
     }
 
     public function datatables(Request $request)
@@ -31,9 +31,10 @@ class UserReportController extends Controller
                     'edit' => function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
                     'plan' => function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
 		            'paid'=> function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
+		            'checked'=> function (Builder $query) use ($date) {$query->whereBetween('messages.created_at',[$date[0].' 00:00:00',$date[2].' 23:59:59']);},
                 ]);
             } else {
-                $data['users'] = User::withCount(['opened','closed','done','edit','plan','paid']);
+                $data['users'] = User::withCount(['opened','closed','done','edit','plan','paid','checked']);
             }
             return DataTables::eloquent($data['users'])
                     ->addColumn('action', function($row){

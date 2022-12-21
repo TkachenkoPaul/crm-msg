@@ -14,18 +14,38 @@
                 </div>
             @endif
             <div class="row">
+{{--                @foreach ($data['status'] as $status)--}}
+{{--                    <div class="col-md-3 col-sm-6 col-12">--}}
+{{--                        <a href="{{ request()->fullUrlWithQuery(['status_id'=> $status->type_id]) }}">--}}
+{{--                            <div class="info-box elevation-3 hoverable">--}}
+{{--                                <span class="info-box-icon {{ $status->color }}"><i class="fas {{ $status->icon }}"></i></span>--}}
+
+{{--                                <div class="info-box-content">--}}
+{{--                                    <span class="info-box-text">{{ $status->name }}</span>--}}
+{{--                                    <span class="info-box-number">{{ $status->messages_count }}</span>--}}
+{{--                                </div>--}}
+{{--                                <!-- /.info-box-content -->--}}
+{{--                            </div>--}}
+{{--                        </a>--}}
+{{--                        <!-- /.info-box -->--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
                 @foreach ($data['status'] as $status)
                     <div class="col-md-3 col-sm-6 col-12">
-                        <div class="info-box elevation-3 hoverable">
-                            <span class="info-box-icon {{ $status->color }}"><i class="fas {{ $status->icon }}"></i></span>
+                        <!-- small card -->
+                        <div class="small-box {{ $status->color }}">
+                            <div class="inner">
+                                <h3>{{ $status->messages_count }}</h3>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">{{ $status->name }}</span>
-                                <span class="info-box-number">{{ $status->messages_count }}</span>
+                                <p>{{ $status->name }}</p>
                             </div>
-                            <!-- /.info-box-content -->
+                            <div class="icon">
+                                <i class="fas {{ $status->icon }}"></i>
+                            </div>
+                            <a href="{{ request()->fullUrlWithQuery(['status_id'=> $status->type_id]) }}" class="small-box-footer">
+                                Подробно <i class="fas fa-arrow-circle-right"></i>
+                            </a>
                         </div>
-                        <!-- /.info-box -->
                     </div>
                 @endforeach
             </div>
@@ -37,7 +57,7 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="fas fa-comments"></i>
-                                Заявки
+                                Заявки {{ isset($data['header'])? $data['header'] : ''}}
                             </h3>
                             <div class="card-tools">
                                 <ul class="nav nav-pills ml-auto">
@@ -49,7 +69,7 @@
                         </div><!-- /.card-header -->
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-12 col-md-8 col-lg-6">
+                                <div class="col-sm-12 col-md-6 col-lg-4">
                                     <form action="{{ route('messages.index') }}" method="GET">
                                         <!-- Date range -->
                                         <div class="form-group">
@@ -73,19 +93,14 @@
                                         <th data-priority="3">ФИО</th>
                                         <th data-priority="1">Адрес</th>
                                         <th data-priority="2">№</th>
-                                        {{-- <th data-priority="5">UID</th>
-                                        <th data-priority="3">Договор</th>
-                                        <th data-priority="4">Фото</th> --}}
-                                        {{-- <th>Примечание</th> --}}
                                         <th>Телефон</th>
                                         <th>Ответственный</th>
                                         <th>Статус</th>
-                                        <th>Опции</th>
-                                        <th>Закрыта</th>
-                                        <th>Запланировано</th>
-                                        {{-- <th>Создана</th>
-                                        <th>Изменена</th> --}}
-                                        {{-- <th></th> --}}
+                                        <th  data-priority="4"></th>
+                                        <th  data-priority="4"></th>
+                                        <th  data-priority="4"></th>
+                                        <th><small>Закрыта</small></th>
+                                        <th><small>Запланировано</small></th>
                                     </tr>
                                 </thead>
                                 <tbody>

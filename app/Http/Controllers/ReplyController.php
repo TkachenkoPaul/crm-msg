@@ -7,13 +7,16 @@ use App\Http\Requests\UpdateReplyRequest;
 use App\Models\Attachment;
 use App\Models\Messages;
 use App\Models\Reply;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Intervention\Image\Facades\Image;
 
 class ReplyController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -23,7 +26,7 @@ class ReplyController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -34,11 +37,11 @@ class ReplyController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreReplyRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function store(StoreReplyRequest $request,$id)
+    public function store(StoreReplyRequest $request,$id): RedirectResponse
     {
-        function human_filesize($bytes, $dec = 2)
+        function human_filesize($bytes, $dec = 2): string
         {
             $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
             $factor = floor((strlen($bytes) - 1) / 3);
@@ -52,15 +55,18 @@ class ReplyController extends Controller
         if ($request->has('images')) {
             Messages::findOrFail($id)->update(['photo' => 1]);
             foreach ($request->file('images') as $image) {
-                $name = $image->getClientOriginalName();
-                $path = $image->store('public/images');
-                $size = $image->getSize();
+                $img = Image::make($image->path());
+                $name = date('Y-m-d-H-i-s').'-'.$image->getClientOriginalName();
+                $pathToSave = public_path('storage/images/'.$name);
+                $path = 'public/images/'.$name;
+                $img->save($pathToSave, 50);
+                clearstatcache();
                 $file = new Attachment();
                 $file->reply_id = $reply->id;;
                 $file->admin_id = auth()->user()->id;
                 $file->path = $path;
                 $file->name = $name;
-                $file->size = human_filesize($size);
+                $file->size = human_filesize($img->filesize());
                 $file->save();
             }
         }
@@ -73,7 +79,7 @@ class ReplyController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Reply $reply)
     {
@@ -84,7 +90,7 @@ class ReplyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Reply $reply)
     {
@@ -96,7 +102,7 @@ class ReplyController extends Controller
      *
      * @param  \App\Http\Requests\UpdateReplyRequest  $request
      * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(UpdateReplyRequest $request, Reply $reply)
     {
@@ -107,7 +113,7 @@ class ReplyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Reply $reply)
     {

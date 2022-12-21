@@ -45,7 +45,8 @@
         $(document).on('click', '[data-toggle="lightbox"]', function(event) {
             event.preventDefault();
             $(this).ekkoLightbox({
-                alwaysShowClose: true
+                alwaysShowClose: false,
+                wrapping: false
             });
         });
     })
@@ -182,20 +183,40 @@
                     name: 's.name'
                 },
                 {
-                    data: 'options',
-                    name: 'options',
+                    data: 'idNumber',
+                    name: 'idNumber',
+                    orderable: false,
+                    searchable: false
+
+                },
+                {
+                    data: 'contractStatus',
+                    name: 'contractStatus',
                     orderable: false,
                     searchable: false
                 },
+                {
+                    data: 'photoStatus',
+                    name: 'photoStatus',
+                    orderable: false,
+                    searchable: false
+                },
+                // {
+                //     data: 'options',
+                //     name: 'options',
+                //     orderable: false,
+                //     searchable: false
+                // },
 
                 {
                     data: 'closed',
-                    name: 'm.closed'
+                    name: 'm.closed',
                 },
                 {
                     data: 'plan',
                     name: 'm.plan'
                 },
+
             ],
             columnDefs: [
                 {
@@ -314,7 +335,13 @@
                     orderable: true,
                     searchable: false,
                 },
-		{
+                {
+                    data: 'checked_count',
+                    name: 'checked_count',
+                    orderable: true,
+                    searchable: false,
+                },
+                {
                     data: 'paid_count',
                     name: 'paid_count',
                     orderable: true,

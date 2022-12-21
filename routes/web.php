@@ -22,8 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/',[MessagesController::class,'index'])->name('messages.index');
     Route::get('/messages/list',[MessagesController::class,'datatables'])->name('messages.list');
     Route::get('/message/{id}/',[MessagesController::class,'show'])->name('messages.show');
-//    Route::post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update');
-    Route::middleware('optimizeImages')->post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update');
+    Route::post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update');
+//    Route::middleware('optimizeImages')->post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update');
     Route::get('/messages/add',[MessagesController::class,'create'])->name('messages.create');
     Route::post('/messages/add',[MessagesController::class,'store'])->name('messages.store');
 

@@ -105,5 +105,10 @@ class User extends Authenticatable
         return $this->hasMany(Messages::class,'responsible_id','id')
             ->where('messages.status_id','=','5');
     }
+    public function checked()
+    {
+        return $this->hasMany(Messages::class,'responsible_id','id')
+            ->where('messages.status_id','=','6');
+    }
 
 }
