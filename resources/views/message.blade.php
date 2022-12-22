@@ -84,22 +84,7 @@
                                                             <p>
                                                                 {{ $reply->text }}
                                                             </p>
-                                                                @if (isset($reply->attachment))
-{{--                                                                    <div class="card-footer bg-white">--}}
-{{--                                                                        <div class="row">--}}
-{{--                                                                            @foreach ($reply->attachment as $file)--}}
-{{--                                                                                <div class="col-sm-6 col-md-4 col-lg-2">--}}
-{{--                                                                                    <a href="{{ Storage::url($file->path) }}"--}}
-{{--                                                                                       data-toggle="lightbox"--}}
-{{--                                                                                       data-gallery="example-gallery{{ $reply->id }}"--}}
-{{--                                                                                       class="col-sm-4">--}}
-{{--                                                                                        <img src="{{ Storage::url($file->path) }}"--}}
-{{--                                                                                             class="img-thumbnail rounded  img-fluid">--}}
-{{--                                                                                    </a>--}}
-{{--                                                                                </div>--}}
-{{--                                                                            @endforeach--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </div>--}}
+                                                                @if (count($reply->attachment) > 0)
                                                                 <div class="card-footer bg-white">
                                                                     <div class="card card-outline card-primary"  >
                                                                     <a class="d-block" data-toggle="collapse" href="#collapse{{ $reply->id }}">
@@ -139,20 +124,6 @@
                                                         <label for="reply">Комментарий</label>
                                                         <textarea name="reply" id="reply" class="form-control" rows="4"></textarea>
                                                     </div>
-                                                    {{-- <div class="form-group">
-                                                        <label for="customFile">Custom File</label>
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="image"
-                                                                name="images[]" multiple>
-                                                            <label class="custom-file-label" for="image">Choose
-                                                                file</label>
-                                                        </div>
-                                                    </div> --}}
-                                                    {{--                                                <div class="form-group">--}}
-                                                    {{--                                                    <label for="image" class="form-label">Фото материалы </label>--}}
-                                                    {{--                                                    <input class="form-control" type="file" id="image"--}}
-                                                    {{--                                                        name="images[]" multiple />--}}
-                                                    {{--                                                </div>--}}
                                                     <div class="form-group">
                                                         <label for="image">Файлы</label>
                                                         <div class="input-group">
