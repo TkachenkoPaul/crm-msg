@@ -94,7 +94,7 @@
                                         <th data-priority="1">Адрес</th>
                                         <th data-priority="2">№</th>
                                         <th>Телефон</th>
-                                        <th>Ответственный</th>
+                                        <th>Исполнитель</th>
                                         <th>Статус</th>
                                         <th  data-priority="4"></th>
                                         <th  data-priority="4"></th>

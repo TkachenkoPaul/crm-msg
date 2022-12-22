@@ -189,7 +189,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="responsible_id" class="text-muted">Ответственный</label>
+                                                    <label for="responsible_id" class="text-muted">Исполнитель</label>
                                                     <select class="custom-select form-control-border border-width-2"
                                                             id="responsible_id" required name="responsible_id">
                                                         @if (isset($data['users']))

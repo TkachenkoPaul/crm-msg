@@ -19,7 +19,7 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="fas fa-comments"></i>
-                                Мастера
+                                Исполнители
                             </h3>
                         </div><!-- /.card-header -->
                         <div class="card-body">
@@ -44,7 +44,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Мастер</th>
+                                        <th>Исполнитель</th>
                                         <th>Открыто</th>
                                         <th>Выполнено</th>
                                         <th>Не выполнено и закрыто</th>
