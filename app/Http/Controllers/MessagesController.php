@@ -99,9 +99,9 @@ class MessagesController extends Controller
                 })
                 ->addColumn('idNumber',function ($row){
                     if (isset($row->uid)) {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-success\" ><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-gradient-success\" ><i class=\"fas fa-satellite-dish\"></i></a>";
                     } else {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-success\"><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-satellite-dish\"></i></a>";
                     }
                     return $uid;
                 })
@@ -124,15 +124,15 @@ class MessagesController extends Controller
                 })
                 ->editColumn('contract', function($row) {
                     if ($row->contract == 1) {
-                        return "<a class=\"btn btn-sm bg-success\"><i class=\"fas fa-check\"></i></a>";
+                        return "<a class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-check\"></i></a>";
                     }
-                    return "<a class=\"btn btn-sm bg-danger\"><i class=\"fas fa-times\"></i></a>";
+                    return "<a class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-times\"></i></a>";
                 })
                 ->editColumn('photo', function($row) {
                     if ($row->photo == 1) {
-                        return "<a class=\"btn btn-sm bg-success\"><i class=\"fas fa-check\"></i></a>";
+                        return "<a class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-check\"></i></a>";
                     }
-                    return "<a class=\"btn btn-sm bg-danger\"><i class=\"fas fa-times\"></i></a>";
+                    return "<a class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-times\"></i></a>";
             })
                 ->editColumn('address', function($row) {
                     return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->address."</a></span>";
