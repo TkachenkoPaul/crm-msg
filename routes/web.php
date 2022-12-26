@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/',[MessagesController::class,'index'])->name('messages.index');
     Route::get('/messages/list',[MessagesController::class,'datatables'])->name('messages.list');
     Route::get('/message/{id}/',[MessagesController::class,'show'])->name('messages.show');
-    Route::get('/message/all/pdf',[MessagesController::class,'showAllPdf'])->name('messages.show.all.pdf');
+    Route::get('/message/all/pdf',[MessagesController::class,'showAllPdf'])->name('messages.show.all.pdf');//test
     Route::get('/message/{id}/pdf',[MessagesController::class,'showPdf'])->name('messages.show.pdf');
     Route::post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update');
     Route::get('/messages/add',[MessagesController::class,'create'])->name('messages.create');
