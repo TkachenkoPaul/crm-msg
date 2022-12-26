@@ -343,6 +343,12 @@
                     searchable: false,
                 },
                 {
+                    data: 'moneywait_count',
+                    name: 'moneywait_count',
+                    orderable: true,
+                    searchable: false,
+                },
+                {
                     data: 'paid_count',
                     name: 'paid_count',
                     orderable: true,

@@ -111,4 +111,10 @@ class User extends Authenticatable
             ->where('messages.status_id','=','6');
     }
 
+    public function moneywait()
+    {
+        return $this->hasMany(Messages::class,'responsible_id','id')
+            ->where('messages.status_id','=','7');
+    }
+
 }
