@@ -113,10 +113,11 @@ class ReplyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Reply  $reply
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy(Reply $reply)
+    public function destroy(Reply $reply,$id)
     {
-        //
+        $reply->with('attachment')->findOrFail($id)->delete();
+        return redirect()->back()->with('message','Комментарий удален!');
     }
 }

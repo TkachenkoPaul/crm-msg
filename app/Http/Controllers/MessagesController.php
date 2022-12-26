@@ -19,6 +19,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use PDF;
+use Zip;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 
@@ -37,6 +39,7 @@ class MessagesController extends Controller
         if ($request->has('status_id')){
             $data['status'] = $data['status']->where('type_id','=',$request->input('status_id'));
             $paramArray['status_id'] = $request->input('status_id');
+
         }
         if ($request->has('date-range')){
             $data['header'] = $request->input('date-range');
@@ -199,11 +202,34 @@ class MessagesController extends Controller
         $data['types'] = MessageType::all();
         $data['users'] = User::all();
         $data['status'] = StatusType::all();
-        return view('message',[
+        return view('message-new',[
             'data' => $data,
             'message' => $messages->findOrFail($id),
             'replies' => Reply::query()->with('admin')->where('message_id',$id)->get()
         ]);
+    }
+
+    public function showPdf(Messages $messages,$id)
+    {
+        $message = $messages->findOrFail($id);
+        $pdf = PDF::loadView('message-pdf', [
+            'message' => $message,
+            'replies' => Reply::query()->with('admin')->where('message_id',$id)->get()
+        ]);
+        return $pdf->download($message->fio.'.pdf');
+    }
+    public function showAllPdf(Messages $messages)
+    {
+        $messages = $messages->where('status_id','=',6)->get();
+        $zip = Zip::create(Carbon::now()->format('Y-m-d-H-i-s').'.zip');
+        foreach ($messages as $message){
+            $pdf = PDF::loadView('message-pdf', [
+                'message' => $message,
+                'replies' => Reply::query()->with('admin')->where('message_id',$message->id)->get()
+            ]);
+            $zip->addRaw($pdf->stream($message->fio.'.pdf'),$message->fio.'.pdf');
+        }
+        return $zip;
     }
 
     /**

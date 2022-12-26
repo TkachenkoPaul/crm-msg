@@ -61,6 +61,13 @@
                             </h3>
                             <div class="card-tools">
                                 <ul class="nav nav-pills ml-auto">
+                                    @if($data['status'][0]->type_id == 6)
+                                        @if($data['status'][0]->messages_count >= 1)
+                                            <li class="nav-item mr-2">
+                                                <a href="{{ route('messages.show.all.pdf') }}" class="btn btn-info"> <i class="fas fa-download"></i> Скачать</a>
+                                            </li>
+                                        @endif
+                                    @endif
                                     <li class="nav-item">
                                         <a href="{{ route('messages.create') }}" class="btn btn-primary">Добавить</a>
                                     </li>
