@@ -22,7 +22,7 @@
 <p><strong>Фото:</strong></p>
 @foreach($replies as $reply)
     @foreach($reply->attachment as $file)
-        <img alt="error" src="{{ public_path('storage/images/'.$file->name) }}" style="width: 100%">
+        <img alt="error" src="{{ public_path('storage/images/'.explode('public/images/',$file->path)[1]) }}" style="width: 100%">
     @endforeach
 @endforeach
 </body>
