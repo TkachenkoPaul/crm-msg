@@ -90,14 +90,29 @@
                                             <p>
                                                 {{ $reply->text }}
                                             </p>
+{{--                                            @if(isset($reply->attachment))--}}
+{{--                                                <p>--}}
+{{--                                                    @foreach ($reply->attachment as $file)--}}
+{{--                                                        <a href="{{ Storage::url($file->path) }}"--}}
+{{--                                                           data-toggle="lightbox"--}}
+{{--                                                           data-gallery="example-gallery{{ $reply->id }}"  class="link-black text-sm"><i class="fas fa-link mr-1"></i>{{ $file->name }}</a>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </p>--}}
+{{--                                            @endif--}}
                                             @if(isset($reply->attachment))
-                                                <p>
+                                                <div class="row">
                                                     @foreach ($reply->attachment as $file)
-                                                        <a href="{{ Storage::url($file->path) }}"
-                                                           data-toggle="lightbox"
-                                                           data-gallery="example-gallery{{ $reply->id }}"  class="link-black text-sm"><i class="fas fa-link mr-1"></i>{{ $file->name }}</a>
+                                                        <div class="col-sm-4 col-md-3 col-lg-2">
+                                                            <a href="{{ Storage::url($file->path) }}"
+                                                               data-toggle="lightbox"
+                                                               data-gallery="example-gallery{{ $reply->id }}"
+                                                               class="col-sm-4">
+                                                                <img src="{{ Storage::url($file->path) }}"
+                                                                     class="img-thumbnail rounded  img-fluid">
+                                                            </a>
+                                                        </div>
                                                     @endforeach
-                                                </p>
+                                                </div>
                                             @endif
                                         </div>
                                     @endforeach
