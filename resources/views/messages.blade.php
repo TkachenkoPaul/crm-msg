@@ -108,6 +108,7 @@
                                         <th  data-priority="4"></th>
                                         <th><small>Закрыта</small></th>
                                         <th><small>Запланировано</small></th>
+                                        <th><small>uid</small></th>
                                     </tr>
                                 </thead>
                                 <tbody>

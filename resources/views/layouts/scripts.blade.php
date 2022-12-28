@@ -151,6 +151,9 @@
             responsive: true,
             lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Все"] ],
             ajax: "{{ $data['request'] ?? '' }}",
+            autoFill: {
+                enable: true
+            },
             order: [
                 [0, 'desc']
             ],
@@ -217,7 +220,11 @@
                     data: 'plan',
                     name: 'm.plan'
                 },
-
+                {
+                    data: 'uid',
+                    name: 'm.uid',
+                    visible: false,
+                },
             ],
             columnDefs: [
                 {
