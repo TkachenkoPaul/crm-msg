@@ -39,6 +39,7 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name'=>'delete users']);
 
         Permission::create(['name'=>'view statistic']);
+        Permission::create(['name'=>'view reports']);
 
         Permission::create(['name'=>'create roles']);
         Permission::create(['name'=>'view roles']);
