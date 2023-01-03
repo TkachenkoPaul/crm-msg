@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MessagesExport;
 use App\Http\Requests\StoreMessagesRequest;
 use App\Http\Requests\UpdateMessagesRequest;
+use App\Imports\MessagesImport;
 use App\Models\Messages;
 use App\Models\MessageType;
 use App\Models\Reply;
@@ -21,6 +23,7 @@ use DataTables;
 use DB;
 use PDF;
 use Zip;
+use Excel;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 
@@ -218,7 +221,7 @@ class MessagesController extends Controller
         ]);
         return $pdf->download($message->fio.'.pdf');
     }
-    public function showAllPdf(Messages $messages)
+    public function exportPdf(Messages $messages)
     {
         $messages = $messages->where('status_id','=',6)->get();
         $zip = Zip::create(Carbon::now()->format('Y-m-d-H-i-s').'.zip');
@@ -230,6 +233,17 @@ class MessagesController extends Controller
             $zip->addRaw($pdf->stream($message->fio.'.pdf'),$message->fio.'.pdf');
         }
         return $zip;
+    }
+
+    public function exportExcel(Messages $messages)
+    {
+        return Excel::download(new MessagesExport, 'report.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        Excel::import(new MessagesImport,$request->file('file'));
+        return redirect('/')->with('message_created', 'Импортировано');
     }
 
     /**
@@ -252,17 +266,13 @@ class MessagesController extends Controller
      */
     public function update(UpdateMessagesRequest $request, Messages $messages,$id)
     {
-	$message = $messages->findOrFail($id);
-	if((string)$message->status_id === "5"){
-		if(auth()->user()->id !== 1){
-                        return redirect()->back()->with('message','Big ERROR!!!!!!!!!!Very Big');
-                }
+        $message = $messages->findOrFail($id);
+        if((string)$request->status_id === "5" or (string)$request->status_id === "6" or  (string)$request->status_id === "7" ){
+            if(!auth()->user()->hasRole(['admin','Super Admin'])){
+                return redirect()->back()->with('message','Permission denied!');
+            }
         }
-	if((string)$request->status_id === "5"){
-		if(auth()->user()->id !== 1){
-			return redirect()->back()->with('message','Big ERROR!!!!!!!!!!');
-		}
-	}
+
         $message->update($request->validated());
         if ((string)$request->status_id === "1") {
             $message->update(['closed' => Carbon::now()->format('Y-m-d H:i:s')]);

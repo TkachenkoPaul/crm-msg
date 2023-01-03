@@ -14,40 +14,26 @@
                 </div>
             @endif
             <div class="row">
-{{--                @foreach ($data['status'] as $status)--}}
-{{--                    <div class="col-md-3 col-sm-6 col-12">--}}
-{{--                        <a href="{{ request()->fullUrlWithQuery(['status_id'=> $status->type_id]) }}">--}}
-{{--                            <div class="info-box elevation-3 hoverable">--}}
-{{--                                <span class="info-box-icon {{ $status->color }}"><i class="fas {{ $status->icon }}"></i></span>--}}
+                @can('view statistic')
+                    @foreach ($data['status'] as $status)
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <!-- small card -->
+                            <div class="small-box {{ $status->color }}">
+                                <div class="inner">
+                                    <h3>{{ $status->messages_count }}</h3>
 
-{{--                                <div class="info-box-content">--}}
-{{--                                    <span class="info-box-text">{{ $status->name }}</span>--}}
-{{--                                    <span class="info-box-number">{{ $status->messages_count }}</span>--}}
-{{--                                </div>--}}
-{{--                                <!-- /.info-box-content -->--}}
-{{--                            </div>--}}
-{{--                        </a>--}}
-{{--                        <!-- /.info-box -->--}}
-{{--                    </div>--}}
-{{--                @endforeach--}}
-                @foreach ($data['status'] as $status)
-                    <div class="col-md-3 col-sm-6 col-12">
-                        <!-- small card -->
-                        <div class="small-box {{ $status->color }}">
-                            <div class="inner">
-                                <h3>{{ $status->messages_count }}</h3>
-
-                                <p>{{ $status->name }}</p>
+                                    <p>{{ $status->name }}</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas {{ $status->icon }}"></i>
+                                </div>
+                                <a href="{{ request()->fullUrlWithQuery(['status_id'=> $status->type_id]) }}" class="small-box-footer">
+                                    Подробно <i class="fas fa-arrow-circle-right"></i>
+                                </a>
                             </div>
-                            <div class="icon">
-                                <i class="fas {{ $status->icon }}"></i>
-                            </div>
-                            <a href="{{ request()->fullUrlWithQuery(['status_id'=> $status->type_id]) }}" class="small-box-footer">
-                                Подробно <i class="fas fa-arrow-circle-right"></i>
-                            </a>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endcan
             </div>
             <!-- /.row -->
             <!-- Main row -->
@@ -61,16 +47,23 @@
                             </h3>
                             <div class="card-tools">
                                 <ul class="nav nav-pills ml-auto">
-                                    @if($data['status'][0]->type_id == 6)
-                                        @if($data['status'][0]->messages_count >= 1)
-                                            <li class="nav-item mr-2">
-                                                <a href="{{ route('messages.show.all.pdf') }}" class="btn btn-info"> <i class="fas fa-download"></i> Скачать</a>
-                                            </li>
+                                    @can('view pdf')
+                                        @if($data['status'][0]->type_id == 6)
+                                            @if($data['status'][0]->messages_count >= 1)
+                                                <li class="nav-item mr-2">
+                                                    <a href="{{ route('messages.show.all.excel') }}" class="btn btn-success"> <i class="far fa-file-excel"></i> Excel</a>
+                                                </li>
+                                                <li class="nav-item mr-2">
+                                                    <a href="{{ route('messages.show.all.pdf') }}" class="btn btn-info"> <i class="far fa-file-pdf"></i> Pdf</a>
+                                                </li>
+                                            @endif
                                         @endif
-                                    @endif
-                                    <li class="nav-item">
-                                        <a href="{{ route('messages.create') }}" class="btn btn-primary">Добавить</a>
-                                    </li>
+                                    @endcan
+                                   @can('create messages')
+                                        <li class="nav-item">
+                                            <a href="{{ route('messages.create') }}" class="btn btn-primary">Добавить</a>
+                                        </li>
+                                   @endcan
                                 </ul>
                             </div>
                         </div><!-- /.card-header -->

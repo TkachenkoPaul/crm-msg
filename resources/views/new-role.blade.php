@@ -1,47 +1,56 @@
 @extends('layouts.layout')
 @section('content')
-    <div class="content-header">
-    </div>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12t">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Роли</a></li>
+                        <li class="breadcrumb-item active">Новая роль</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Main content -->
     <section class="content mt-3">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
             <!-- Main row -->
             <div class="row justify-content-md-center">
                 <section class="col-lg-8 col-sm-12 col-md-8 align-content-lg-center">
                     <div class="card ">
                         <div class="card-header">
-                            <h3 class="card-title">Новый пользователь</h3>
+                            <h3 class="card-title">Новая роль</h3>
                         </div>
                         <!-- /.card-header -->
-                        <form method="POST" action="{{ route('users.store') }}">
+                        <form method="POST" action="{{ route('roles.store') }}">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="name">Имя</label>
+                                    <label for="fio">Имя</label>
                                     <input type="text" value="{{ old('name') }}"
                                         class="form-control form-control-border border-width-2" id="name"
                                         name="name" placeholder="Имя" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="login">Логин</label>
-                                    <input type="text" value="{{ old('login') }}"
-                                        class="form-control form-control-border border-width-2" id="login"
-                                        name="login" placeholder="Логин" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="role">Роль</label>
-                                    <select class="custom-select form-control-border" id="role" name="role">
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Пароль</label>
-                                    <input type="text" value="{{ old('password') }}"
-                                        class="form-control form-control-border border-width-2" id="password"
-                                        name="password" placeholder="Пароль" required>
-                                </div>
+                                @foreach($permissions as $permission)
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="customCheckbox{{ $permission->id }}"  class="custom-control-input" type="checkbox"  name="permissions[]" value="{{ $permission->id }}">
+                                            <label for="customCheckbox{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>

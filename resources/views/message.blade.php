@@ -99,37 +99,6 @@
                                                                     @endforeach
                                                                 </div>
                                                             @endif
-
-{{--                                                                @if (count($reply->attachment) > 0)--}}
-{{--                                                                <div class="card-footer bg-white">--}}
-{{--                                                                    <div class="card card-outline card-primary"  >--}}
-{{--                                                                    <a class="d-block" data-toggle="collapse" href="#collapse-{{ $reply->id }}">--}}
-{{--                                                                        <div class="card-header">--}}
-{{--                                                                            <small class="card-title">--}}
-{{--                                                                                Файлы--}}
-{{--                                                                            </small>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </a>--}}
-{{--                                                                    <div id="collapse-{{ $reply->id }}" class="collapse" data-parent="#accordion-{{ $message->id }}">--}}
-{{--                                                                        <div class="card-body">--}}
-{{--                                                                            <div class="row">--}}
-{{--                                                                                @foreach ($reply->attachment as $file)--}}
-{{--                                                                                    <div class="col-sm-4 col-md-3 col-lg-2">--}}
-{{--                                                                                        <a href="{{ Storage::url($file->path) }}"--}}
-{{--                                                                                           data-toggle="lightbox"--}}
-{{--                                                                                           data-gallery="example-gallery{{ $reply->id }}"--}}
-{{--                                                                                           class="col-sm-4">--}}
-{{--                                                                                            <img src="{{ Storage::url($file->path) }}"--}}
-{{--                                                                                                 class="img-thumbnail rounded  img-fluid">--}}
-{{--                                                                                        </a>--}}
-{{--                                                                                    </div>--}}
-{{--                                                                                @endforeach--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </div>--}}
-{{--                                                                </div>--}}
-{{--                                                                </div>--}}
-{{--                                                                @endif--}}
                                                             </div>
                                                     @endforeach
                                                 @endif
@@ -209,6 +178,9 @@
                                                     <select class="custom-select form-control-border border-width-2"
                                                             id="responsible_id" required name="responsible_id">
                                                         @if (isset($data['users']))
+                                                            @if(!isset($message->responsible_id))
+                                                                <option value="" disabled selected>Test</option>
+                                                            @endif
                                                             @foreach ($data['users'] as $user)
                                                                 <option
                                                                     {{ $message->responsible_id === $user->id ? 'selected' : '' }}

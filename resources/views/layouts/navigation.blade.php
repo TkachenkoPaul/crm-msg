@@ -30,41 +30,60 @@
                         <p>Заявки</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('user-report.index') }}" class="nav-link">
-                        <i class="far fa-chart-bar nav-icon"></i>
-                        <p>Статистика</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cogs nav-icon"></i>
-                        <p>
-                            Настройки
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link ">
-                                <i class="fas fa-users-cog nav-icon"></i>
-                                <p>Пользователи</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('status.index') }}" class="nav-link">
-                                <i class="fas fa-tasks nav-icon"></i>
-                                <p>Статусы</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('types.index') }}" class="nav-link">
-                                <i class="fas fa-toolbox nav-icon"></i>
-                                <p>Типы</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @can('view statistic')
+                    <li class="nav-item">
+                        <a href="{{ route('user-report.index') }}" class="nav-link">
+                            <i class="far fa-chart-bar nav-icon"></i>
+                            <p>Статистика</p>
+                        </a>
+                    </li>
+                @endcan
+
+                @canany('view users|view roles|view types|view statuses')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cogs nav-icon"></i>
+                            <p>
+                                Настройки
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @can('view roles')
+                                <li class="nav-item">
+                                    <a href="{{ route('roles.index') }}" class="nav-link ">
+                                        <i class="fas fa-user-shield nav-icon"></i>
+                                        <p>Роли</p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('view users')
+                                    <li class="nav-item">
+                                        <a href="{{ route('users.index') }}" class="nav-link ">
+                                            <i class="fas fa-users nav-icon"></i>
+                                            <p>Пользователи</p>
+                                        </a>
+                                    </li>
+                            @endcan
+                           @can('view statuses')
+                                    <li class="nav-item">
+                                        <a href="{{ route('status.index') }}" class="nav-link">
+                                            <i class="fas fa-tasks nav-icon"></i>
+                                            <p>Статусы</p>
+                                        </a>
+                                    </li>
+                           @endcan
+                            @can('view types')
+                                <li class="nav-item">
+                                    <a href="{{ route('types.index') }}" class="nav-link">
+                                        <i class="fas fa-toolbox nav-icon"></i>
+                                        <p>Типы</p>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
                 <li class="nav-item">
                     <a href="{{ route('logout') }}" class="nav-link">
                         <i class="fas fa-sign-out-alt nav-icon"></i>

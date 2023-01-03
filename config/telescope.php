@@ -78,6 +78,7 @@ return [
     'middleware' => [
         'web',
         Authorize::class,
+        'can:create users'
     ],
 
     /*

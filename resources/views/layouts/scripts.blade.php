@@ -149,7 +149,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Все"] ],
+            lengthMenu: [ [ 50, 100, -1], [ 50, 100, "Все"] ],
             ajax: "{{ $data['request'] ?? '' }}",
             autoFill: {
                 enable: true
@@ -299,6 +299,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
+            lengthMenu: [ [ 50, 100, -1], [ 50, 100, "Все"] ],
             ajax: "{{ $data['request-user-report'] ?? '' }}",
             columns: [
                 {
@@ -392,6 +393,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
+            lengthMenu: [ [-1], [ "Все"] ],
             ajax: "{{ route('users.list') }}",
             columns: [
                 {
@@ -403,6 +405,12 @@
                 {
                     data: 'name',
                     name: 'name',
+                    orderable: true,
+                    searchable: true,
+                },
+                {
+                    data: 'role',
+                    name: 'role',
                     orderable: true,
                     searchable: true,
                 },
@@ -425,8 +433,14 @@
                     searchable: true,
                 },
                 {
-                    data: 'action',
-                    name: 'action',
+                    data: 'edit',
+                    name: 'edit',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'delete',
+                    name: 'delete',
                     orderable: false,
                     searchable: false
                 },
@@ -548,6 +562,70 @@
                 {
                     data: 'action',
                     name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
+        });
+        let roles = $('.yajra-datatable-roles').DataTable({
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+
+            },
+            pagingType: 'simple',
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: "{{ route('roles.list') }}",
+            columns: [
+                {
+                    data: 'id',
+                    name: 'r.id'
+                },
+                {
+                    data: 'name',
+                    name: 'r.name'
+                },
+                {
+                    data: 'guard_name',
+                    name: 'r.guard_name'
+                },
+                {
+                    data: 'created_at',
+                    name: 'r.created_at'
+                },
+                {
+                    data: 'updated_at',
+                    name: 'r.updated_at'
+                },
+                {
+                    data: 'edit',
+                    name: 'edit',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'delete',
+                    name: 'delete',
                     orderable: false,
                     searchable: false
                 },

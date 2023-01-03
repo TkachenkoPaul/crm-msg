@@ -44,9 +44,11 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Имя</th>
+                                        <th>Роль</th>
                                         <th>Добавил</th>
                                         <th>Добавлен</th>
                                         <th>Изменен</th>
+                                        <th></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -55,11 +57,9 @@
                             </table>
                         </div>
                     </div><!-- /.card-body -->
+                </section>
             </div>
-    </section>
-    </div>
-    <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
+        </div>
     </section>
     <!-- /.content -->
 @stop

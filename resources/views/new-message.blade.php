@@ -98,10 +98,45 @@
 
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                                <button type="submit" class="btn btn-success float-right" >  <i class="fas fa-plus"></i> Добавить</button>
+                                <button  type="button" class="btn btn-info float-right mr-2" data-toggle="modal" data-target="#modal-default"> <i class="far fa-file-excel"></i> Импорт</button>
                             </div>
                         </form>
                     </div>
+
+                    <div class="modal fade" id="modal-default">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Загрузить excel файл </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('messages.import.excel') }}" method="POST"  enctype="multipart/form-data" id="import-file">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="image">Excel</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input name="file" type="file" class="custom-file-input" id="file">
+                                                    <label class="custom-file-label" for="file">Выбрать файл</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" form="import-file" class="btn btn-primary">Импортировать</button>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+
                 </section>
             </div>
             <!-- /.row (main row) -->
