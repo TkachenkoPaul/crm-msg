@@ -267,12 +267,16 @@ class MessagesController extends Controller
     public function update(UpdateMessagesRequest $request, Messages $messages,$id)
     {
         $message = $messages->findOrFail($id);
-        if((string)$request->status_id === "5" or (string)$request->status_id === "6" or  (string)$request->status_id === "7" ){
-            if(!auth()->user()->hasRole(['admin','Super Admin'])){
-                return redirect()->back()->with('message','Permission denied!');
+        if((string)$message->status_id === "5"){
+            if(auth()->user()->id !== 1){
+                abort(403,'Попытка изменения заявки! Действие запрещено!');
             }
         }
-
+        if((string)$request->status_id === "5" or (string)$request->status_id === "6" or  (string)$request->status_id === "7" ){
+            if(!auth()->user()->hasRole(['admin','Super Admin'])){
+                abort(403,'Действие запрещено!');
+            }
+        }
         $message->update($request->validated());
         if ((string)$request->status_id === "1") {
             $message->update(['closed' => Carbon::now()->format('Y-m-d H:i:s')]);
