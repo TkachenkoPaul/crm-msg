@@ -145,7 +145,7 @@
 
             },
             autoWidth:false,
-            pagingType: 'simple',
+            pagingType: 'simple_numbers',
             processing: true,
             serverSide: true,
             responsive: true,
@@ -205,13 +205,12 @@
                     orderable: false,
                     searchable: false
                 },
-                // {
-                //     data: 'options',
-                //     name: 'options',
-                //     orderable: false,
-                //     searchable: false
-                // },
-
+                {
+                    data: 'delete',
+                    name: 'delete',
+                    orderable: false,
+                    searchable: false
+                },
                 {
                     data: 'closed',
                     name: 'm.closed',
@@ -253,6 +252,10 @@
                 },
                 {
                     targets: 8,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 9,
                     className: 'dt-body-center'
                 },
                 {
@@ -389,7 +392,7 @@
                 }
 
             },
-            pagingType: 'simple',
+            pagingType: 'simple_numbers',
             processing: true,
             serverSide: true,
             responsive: true,

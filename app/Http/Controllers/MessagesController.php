@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use DB;
 use PDF;
+use Throwable;
 use Zip;
 use Excel;
 use Illuminate\Http\Response;
@@ -84,46 +85,33 @@ class MessagesController extends Controller
 
                     return "<a href=\"".route('messages.show',$row->id)."\" class=\"btn btn-app\"><i class=\"fas fa-edit\"></i></a>";
                 })
-                ->addColumn('options', function($row){
-                    if (isset($row->uid)) {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-success\" ><i  style=\"font-size: .60rem;\" class=\"fas fa-satellite-dish\"></i></a>";
-                    } else {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-success\"><i  style=\"font-size: .60rem;\" class=\"fas fa-satellite-dish\"></i></a>";
-                    }
-                    if ($row->contract == 1) {
-                        $contract = "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-success\"><i style=\"font-size: .60rem;\" class=\"fas fa-file-contract\"></i></a>";
-                    }else {
-                        $contract = "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-danger\"><i style=\"font-size: .60rem;\" class=\"fas fa-file-contract\"></i></a>";
-                    }
-                     if ($row->photo == 1) {
-                        $photo = "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-success\"><i style=\"font-size: .60rem;\" class=\"fas fa-images\"></i></a>";
-                    } else{
-                        $photo = "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-danger\"><i style=\"font-size: .60rem;\" class=\"fas fa-images\"></i></a>";
-                    }
-                    $html = '<div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">'.$uid.'</div><div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">'.$contract.'</div><div class="col-sm-4 col-md-12 col-lg-12 col-xl-4">'.$photo.'</div>';
-                    return '<div class="row" style="font-size: 10px;">'.$html.'</div>';
+                ->addColumn('delete', function($row){
+                    return "<a href=\"".route('messages.destroy',$row->id)."\" class=\"btn btn-sm bg-gradient-info\"><i class=\"fas fa-trash-alt\"></i></a>";
                 })
                 ->addColumn('idNumber',function ($row){
                     if (isset($row->uid)) {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-gradient-success\" ><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn  btn-sm bg-gradient-success\" ><i class=\"fas fa-satellite-dish\"></i></a>";
                     } else {
-                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-satellite-dish\"></i></a>";
+                        $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn  btn-sm bg-gradient-danger\"><i class=\"fas fa-satellite-dish\"></i></a>";
                     }
                     return $uid;
                 })
                 ->addColumn('contractStatus',function ($row){
                     if ($row->contract == 1) {
-                        return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-success\"><i class=\"fas fa-file-contract\"></i></a>";
+                        return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-file-contract\"></i></a>";
                     }else {
-                        return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-danger\"><i class=\"fas fa-file-contract\"></i></a>";
+                        return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-file-contract\"></i></a>";
                     }
                 })
                 ->addColumn('photoStatus',function ($row){
                     if ($row->photo == 1) {
-                        return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-success\"><i class=\"fas fa-images\"></i></a>";
+                        return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-images\"></i></a>";
                     } else{
-                        return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-danger\"><i class=\"fas fa-images\"></i></a>";
+                        return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-images\"></i></a>";
                     }
+                })
+                ->editColumn('id', function($row) {
+                    return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->id."</a></span>";
                 })
                 ->editColumn('fio', function($row) {
                     return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->fio."</a></span>";
@@ -150,12 +138,13 @@ class MessagesController extends Controller
                     return '<small>'.$row->plan.'</small>';
                 })
                 ->rawColumns([
+                    'id',
                     'action',
                     'fio',
                     'address',
                     'contract',
                     'photo',
-                    'options',
+                    'delete',
                     'idNumber',
                     'contractStatus',
                     'photoStatus',
@@ -234,12 +223,10 @@ class MessagesController extends Controller
         }
         return $zip;
     }
-
     public function exportExcel(Messages $messages)
     {
         return Excel::download(new MessagesExport, 'report.xlsx');
     }
-
     public function importExcel(Request $request)
     {
         Excel::import(new MessagesImport,$request->file('file'));
@@ -250,7 +237,7 @@ class MessagesController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param Messages $messages
-     * @return Response
+     * @return void
      */
     public function edit(Messages $messages)
     {
@@ -262,6 +249,7 @@ class MessagesController extends Controller
      *
      * @param UpdateMessagesRequest $request
      * @param Messages $messages
+     * @param $id
      * @return RedirectResponse
      */
     public function update(UpdateMessagesRequest $request, Messages $messages,$id)
@@ -290,10 +278,13 @@ class MessagesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Messages $messages
-     * @return Response
+     * @param $id
+     * @return RedirectResponse
+     * @throws Throwable
      */
-    public function destroy(Messages $messages)
+    public function destroy(Messages $messages,$id)
     {
-        //
+        $messages->findOrFail($id)->delete();
+        return redirect('/')->with('message_created','Заявка #'.$id.' удалена');
     }
 }

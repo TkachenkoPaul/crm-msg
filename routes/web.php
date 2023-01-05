@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/message/import/excel',[MessagesController::class,'importExcel'])->name('messages.import.excel')->middleware('can:create messages');
     Route::get('/message/{id}/pdf',[MessagesController::class,'showPdf'])->name('messages.show.pdf')->middleware('can:create messages');
     Route::post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update')->middleware('can:update messages');
+    Route::get('/message/delete/{id}/',[MessagesController::class,'destroy'])->name('messages.destroy')->middleware('can:delete messages');
     Route::get('/messages/add',[MessagesController::class,'create'])->name('messages.create')->middleware('can:create messages');
     Route::post('/messages/add',[MessagesController::class,'store'])->name('messages.store')->middleware('can:create messages');
 

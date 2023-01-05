@@ -1,14 +1,17 @@
 @extends('layouts.layout')
 @section('content')
-    <div class="content-header">
-        {{--        <div class="container-fluid"> --}}
-        {{--            <div class="row mb-2"> --}}
-        {{--                <div class="col-sm-6"> --}}
-        {{--                    <h1 class="m-0">Создать заявку</h1> --}}
-        {{--                </div><!-- /.col --> --}}
-        {{--            </div><!-- /.row --> --}}
-        {{--        </div><!-- /.container-fluid --> --}}
-    </div>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="{{ route('messages.index') }}">Заявки</a></li>
+                        <li class="breadcrumb-item active">Новая заявка</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Main content -->
     <section class="content mt-3">
         <div class="container-fluid">

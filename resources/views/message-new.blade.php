@@ -1,8 +1,17 @@
 @extends('layouts.layout')
 @section('content')
     <!-- Content Header (Page header) -->
+
     <section class="content-header">
         <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="{{ route('messages.index') }}">Заявки</a></li>
+                        <li class="breadcrumb-item active">Заявка № {{ $message->id }}</li>
+                    </ol>
+                </div>
+            </div>
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>{{ $message->address }}</h1>
@@ -273,11 +282,14 @@
 
                             </div>
                             <div class="card-footer bg-white">
-                                <button type="submit" form="edit-message" class="btn btn-success float-right">
+                                <button type="submit" form="edit-message" class="btn bg-gradient-success float-right">
                                     <i class="far fa-edit"></i> Изменить
                                 </button>
-                                <a href="{{ route('messages.show.pdf',$message->id) }}" class="btn btn-primary float-right mr-2 fill-text-color" style="color: #fff !important;">
+                                <a href="{{ route('messages.show.pdf',$message->id) }}" class="btn bg-gradient-primary float-right mr-2 fill-text-color" style="color: #fff !important;">
                                     <i class="fas fa-download"></i> Скачать PDF
+                                </a>
+                                <a href="{{ route('messages.destroy',$message->id) }}" class="btn bg-gradient-danger float-right mr-2 fill-text-color" style="color: #fff !important;">
+                                    <i class="fas fa-trash-alt"></i> Удалить
                                 </a>
                             </div>
                         </form>
