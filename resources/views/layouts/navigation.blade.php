@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
         <img src="{{ asset('dist/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-            style="opacity: .7">
+             style="opacity: .7">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
 
@@ -30,6 +30,14 @@
                         <p>Заявки</p>
                     </a>
                 </li>
+                @can('view roles')
+                    <li class="nav-item">
+                        <a href="{{ route('operations.index') }}" class="nav-link ">
+                            <i class="fas fa-tasks nav-icon"></i>
+                            <p>Операции</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('view statistic')
                     <li class="nav-item">
                         <a href="{{ route('user-report.index') }}" class="nav-link">
@@ -58,21 +66,21 @@
                                 </li>
                             @endcan
                             @can('view users')
-                                    <li class="nav-item">
-                                        <a href="{{ route('users.index') }}" class="nav-link ">
-                                            <i class="fas fa-users nav-icon"></i>
-                                            <p>Пользователи</p>
-                                        </a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('users.index') }}" class="nav-link ">
+                                        <i class="fas fa-users nav-icon"></i>
+                                        <p>Пользователи</p>
+                                    </a>
+                                </li>
                             @endcan
-                           @can('view statuses')
-                                    <li class="nav-item">
-                                        <a href="{{ route('status.index') }}" class="nav-link">
-                                            <i class="fas fa-tasks nav-icon"></i>
-                                            <p>Статусы</p>
-                                        </a>
-                                    </li>
-                           @endcan
+                            @can('view statuses')
+                                <li class="nav-item">
+                                    <a href="{{ route('status.index') }}" class="nav-link">
+                                        <i class="fas fa-tasks nav-icon"></i>
+                                        <p>Статусы</p>
+                                    </a>
+                                </li>
+                            @endcan
                             @can('view types')
                                 <li class="nav-item">
                                     <a href="{{ route('types.index') }}" class="nav-link">

@@ -32,6 +32,15 @@
                 </div>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-6">
                 <div class="card card-info">
@@ -89,9 +98,13 @@
                                     @foreach ($replies as $reply)
                                         <div class="post clearfix">
                                             <div class="user-block">
-                                                <img class="img-circle img-bordered-sm" src="{{ asset('dist/img/user-icon.png') }}"
+                                                <img class="img-circle img-bordered-sm"
+                                                     src="{{ asset('dist/img/user-icon.png') }}"
                                                      alt="user image">
-                                                <span class="username">{{ $reply->admin->name }} <a href="{{ route('reply.destroy',$reply->id) }}" class="text-muted ml-2 float-right hover:text-red-800"><i class="fas fa-times"></i></a></span>
+                                                <span class="username">{{ $reply->admin->name }} <a
+                                                        href="{{ route('reply.destroy',$reply->id) }}"
+                                                        class="text-muted ml-2 float-right hover:text-red-800"><i
+                                                            class="fas fa-times"></i></a></span>
                                                 <span class="description">{{ $reply->created_at }}</span>
                                                 <div></div>
                                             </div>
@@ -99,15 +112,15 @@
                                             <p>
                                                 {{ $reply->text }}
                                             </p>
-{{--                                            @if(isset($reply->attachment))--}}
-{{--                                                <p>--}}
-{{--                                                    @foreach ($reply->attachment as $file)--}}
-{{--                                                        <a href="{{ Storage::url($file->path) }}"--}}
-{{--                                                           data-toggle="lightbox"--}}
-{{--                                                           data-gallery="example-gallery{{ $reply->id }}"  class="link-black text-sm"><i class="fas fa-link mr-1"></i>{{ $file->name }}</a>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </p>--}}
-{{--                                            @endif--}}
+                                            {{--                                            @if(isset($reply->attachment))--}}
+                                            {{--                                                <p>--}}
+                                            {{--                                                    @foreach ($reply->attachment as $file)--}}
+                                            {{--                                                        <a href="{{ Storage::url($file->path) }}"--}}
+                                            {{--                                                           data-toggle="lightbox"--}}
+                                            {{--                                                           data-gallery="example-gallery{{ $reply->id }}"  class="link-black text-sm"><i class="fas fa-link mr-1"></i>{{ $file->name }}</a>--}}
+                                            {{--                                                    @endforeach--}}
+                                            {{--                                                </p>--}}
+                                            {{--                                            @endif--}}
                                             @if(isset($reply->attachment))
                                                 <div class="row">
                                                     @foreach ($reply->attachment as $file)
@@ -137,14 +150,16 @@
                                         <label for="image">Файлы</label>
                                         <div class="input-group">
                                             <div class="custom-file">
-                                                <input name="images[]" multiple type="file" class="custom-file-input" id="image">
+                                                <input name="images[]" multiple type="file" class="custom-file-input"
+                                                       id="image">
                                                 <label class="custom-file-label" for="image">Выбрать файлы</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit"
-                                                class="btn btn-primary float-right">Отправить</button>
+                                                class="btn btn-primary float-right">Отправить
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -247,10 +262,10 @@
                                             id="contract" required name="contract">
                                         @if (isset($message->contract))
                                             @if ($message->contract == 0)
-                                                <option value="0" selected>Договора нет </option>
+                                                <option value="0" selected>Договора нет</option>
                                                 <option value="1">Договор есть</option>
                                             @elseif ($message->contract == 1)
-                                                <option value="0">Договора нет </option>
+                                                <option value="0">Договора нет</option>
                                                 <option value="1" selected>Договор есть</option>
                                             @endif
                                         @endif
@@ -263,32 +278,25 @@
 
                                         <div class="input-group" data-target="#reservationdate"
                                              data-toggle="datetimepicker">
-                                            <input type="text"
+                                            <input id="plan" type="text"
                                                    class="form-control form-control-border border-width-2"
-                                                   data-target="#reservationdate" name="plan" />
+                                                   data-target="#reservationdate" name="plan"/>
                                         </div>
                                     </div>
                                 </div>
-
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
                             </div>
                             <div class="card-footer bg-white">
                                 <button type="submit" form="edit-message" class="btn bg-gradient-success float-right">
                                     <i class="far fa-edit"></i> Изменить
                                 </button>
-                                <a href="{{ route('messages.show.pdf',$message->id) }}" class="btn bg-gradient-primary float-right mr-2 fill-text-color" style="color: #fff !important;">
+                                <a href="{{ route('messages.show.pdf',$message->id) }}"
+                                   class="btn bg-gradient-primary float-right mr-2 fill-text-color"
+                                   style="color: #fff !important;">
                                     <i class="fas fa-download"></i> Скачать PDF
                                 </a>
-                                <a href="{{ route('messages.destroy',$message->id) }}" class="btn bg-gradient-danger float-right mr-2 fill-text-color" style="color: #fff !important;">
+                                <a href="{{ route('messages.destroy',$message->id) }}"
+                                   class="btn bg-gradient-danger float-right mr-2 fill-text-color"
+                                   style="color: #fff !important;">
                                     <i class="fas fa-trash-alt"></i> Удалить
                                 </a>
                             </div>

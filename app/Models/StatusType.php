@@ -41,11 +41,11 @@ class StatusType extends Model
 
     public function admin(): HasOne
     {
-        return $this->hasOne(User::class,'id','admin_id');
+        return $this->hasOne(User::class, 'id', 'admin_id');
     }
 
     public function messages()
     {
-        return $this->hasMany(Messages::class,'status_id','type_id');
+        return $this->hasMany(Messages::class, 'status_id', 'type_id');
     }
 }

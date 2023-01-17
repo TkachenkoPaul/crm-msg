@@ -40,10 +40,9 @@
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
 
-
 <script>
-    $(function() {
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+    $(function () {
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
             event.preventDefault();
             $(this).ekkoLightbox({
                 alwaysShowClose: false,
@@ -54,7 +53,7 @@
 </script>
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip()
         $(function () {
             bsCustomFileInput.init();
@@ -108,16 +107,16 @@
         })
 
         @if (isset($message))
-            @if ($message->plan)
-                $('#reservationdate').datetimepicker({
-                    defaultDate: "{{ $message->plan }}",
-                    format: 'YYYY-MM-DD',
-                });
-            @else
-                $('#reservationdate').datetimepicker({
-                    format: 'YYYY-MM-DD',
-                });
-            @endif
+        @if ($message->plan)
+        $('#reservationdate').datetimepicker({
+            defaultDate: "{{ $message->plan }}",
+            format: 'YYYY-MM-DD',
+        });
+        @else
+        $('#reservationdate').datetimepicker({
+            format: 'YYYY-MM-DD',
+        });
+        @endif
         @endif
 
         let messages = $('.yajra-datatable').DataTable({
@@ -144,12 +143,166 @@
                 }
 
             },
-            autoWidth:false,
+            autoWidth: false,
             pagingType: 'simple_numbers',
             processing: true,
             serverSide: true,
             responsive: true,
-            lengthMenu: [ [ 50, 100, -1], [ 50, 100, "Все"] ],
+            lengthMenu: [[50, 100, -1], [50, 100, "Все"]],
+            ajax: "{{ $data['request'] ?? '' }}",
+            autoFill: {
+                enable: true
+            },
+            order: [
+                [0, 'desc']
+            ],
+            columns: [
+                {
+                    data: 'id',
+                    name: 'm.id'
+                },
+                {
+                    data: 'fio',
+                    name: 'm.fio'
+                },
+                {
+                    data: 'address',
+                    name: 'm.address'
+                },
+                {
+                    data: 'house',
+                    name: 'm.house'
+                },
+                {
+                    data: 'phone',
+                    name: 'm.phone'
+                },
+                {
+                    data: 'rname',
+                    name: 'r.name'
+                },
+                {
+                    data: 'sname',
+                    name: 's.name'
+                },
+                {
+                    data: 'idNumber',
+                    name: 'idNumber',
+                    orderable: false,
+                    searchable: false
+
+                },
+                {
+                    data: 'contractStatus',
+                    name: 'contractStatus',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'photoStatus',
+                    name: 'photoStatus',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'delete',
+                    name: 'delete',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'closed',
+                    name: 'm.closed',
+                },
+                {
+                    data: 'plan',
+                    name: 'm.plan'
+                },
+                {
+                    data: 'uid',
+                    name: 'm.uid',
+                    visible: false,
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 1,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 3,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 4,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 5,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 6,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 8,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 9,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: -3,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -2,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+
+            ],
+
+        });
+        let operations = $('.yajra-datatable-operations').DataTable({
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+
+            },
+            autoWidth: false,
+            pagingType: 'simple_numbers',
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            lengthMenu: [[50, 100, -1], [50, 100, "Все"]],
             ajax: "{{ $data['request'] ?? '' }}",
             autoFill: {
                 enable: true
@@ -302,7 +455,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            lengthMenu: [ [ 50, 100, -1], [ 50, 100, "Все"] ],
+            lengthMenu: [[50, 100, -1], [50, 100, "Все"]],
             ajax: "{{ $data['request-user-report'] ?? '' }}",
             columns: [
                 {
@@ -396,7 +549,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            lengthMenu: [ [-1], [ "Все"] ],
+            lengthMenu: [[-1], ["Все"]],
             ajax: "{{ route('users.list') }}",
             columns: [
                 {

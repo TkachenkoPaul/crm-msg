@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\MessageTypeController;
+use App\Http\Controllers\OperationController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusTypeController;
@@ -20,45 +21,49 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware('auth')->group(function () {
-    Route::get('/',[MessagesController::class,'index'])->name('messages.index')->middleware('can:view messages');
-    Route::get('/messages/list',[MessagesController::class,'datatables'])->name('messages.list')->middleware('can:view messages');
-    Route::get('/message/{id}/',[MessagesController::class,'show'])->name('messages.show')->middleware('can:view messages');
-    Route::get('/message/export/pdf',[MessagesController::class,'exportPdf'])->name('messages.show.all.pdf')->middleware('can:create messages');
-    Route::get('/message/export/excel',[MessagesController::class,'exportExcel'])->name('messages.show.all.excel')->middleware('can:create messages');
-    Route::post('/message/import/excel',[MessagesController::class,'importExcel'])->name('messages.import.excel')->middleware('can:create messages');
-    Route::get('/message/{id}/pdf',[MessagesController::class,'showPdf'])->name('messages.show.pdf')->middleware('can:create messages');
-    Route::post('/message/{id}/',[MessagesController::class,'update'])->name('messages.update')->middleware('can:update messages');
-    Route::get('/message/delete/{id}/',[MessagesController::class,'destroy'])->name('messages.destroy')->middleware('can:delete messages');
-    Route::get('/messages/add',[MessagesController::class,'create'])->name('messages.create')->middleware('can:create messages');
-    Route::post('/messages/add',[MessagesController::class,'store'])->name('messages.store')->middleware('can:create messages');
+    Route::get('/', [MessagesController::class, 'index'])->name('messages.index')->middleware('can:view messages');
+    Route::get('/messages/list', [MessagesController::class, 'datatables'])->name('messages.list')->middleware('can:view messages');
+    Route::get('/message/{id}/', [MessagesController::class, 'show'])->name('messages.show')->middleware('can:view messages');
+    Route::get('/message/export/pdf', [MessagesController::class, 'exportPdf'])->name('messages.show.all.pdf')->middleware('can:create messages');
+    Route::get('/message/export/excel', [MessagesController::class, 'exportExcel'])->name('messages.show.all.excel')->middleware('can:create messages');
+    Route::post('/message/import/excel', [MessagesController::class, 'importExcel'])->name('messages.import.excel')->middleware('can:create messages');
+    Route::get('/message/{id}/pdf', [MessagesController::class, 'showPdf'])->name('messages.show.pdf')->middleware('can:create messages');
+    Route::post('/message/{id}/', [MessagesController::class, 'update'])->name('messages.update')->middleware('can:update messages');
+    Route::get('/messages/update/', [MessagesController::class, 'updateMessages'])->name('messages.update.group')->middleware('can:view roles');
+    Route::get('/message/delete/{id}/', [MessagesController::class, 'destroy'])->name('messages.destroy')->middleware('can:delete messages');
+    Route::get('/messages/add', [MessagesController::class, 'create'])->name('messages.create')->middleware('can:create messages');
+    Route::post('/messages/add', [MessagesController::class, 'store'])->name('messages.store')->middleware('can:create messages');
 
-    Route::get('roles',[RoleController::class,'index'])->name('roles.index')->middleware('can:view roles');
-    Route::get('roles/list',[RoleController::class,'datatables'])->name('roles.list')->middleware('can:view roles');
-    Route::get('roles/{id}/',[RoleController::class,'show'])->name('roles.show')->middleware('can:view roles');
-    Route::post('roles/{id}/',[RoleController::class,'update'])->name('roles.update')->middleware('can:update roles');
-    Route::get('roles/destroy/{id}',[RoleController::class,'destroy'])->name('roles.destroy')->middleware('can:delete roles');
-    Route::get('role/add/',[RoleController::class,'create'])->name('roles.create')->middleware('can:create roles');
-    Route::post('role/add/',[RoleController::class,'store'])->name('roles.store')->middleware('can:create roles');
+    Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');
+    Route::get('/messages/operations/list', [OperationController::class, 'datatables'])->name('operations.list')->middleware('can:view roles');
 
-    Route::get('/users',[UserController::class,'index'])->name('users.index')->middleware('can:view users');
-    Route::get('/users/list',[UserController::class,'datatables'])->name('users.list')->middleware('can:view users');
-    Route::get('/users/{id}/show',[UserController::class,'show'])->name('users.show')->middleware('can:view users');
-    Route::post('/users/{id}/update',[UserController::class,'update'])->name('users.update')->middleware('can:update users');
-    Route::get('/users/{id}/destroy',[UserController::class,'destroy'])->name('users.destroy')->middleware('can:delete users');
-    Route::get('/users/add',[UserController::class,'create'])->name('users.create')->middleware('can:create users');
-    Route::post('/users/add',[UserController::class,'store'])->name('users.store')->middleware('can:create users');
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index')->middleware('can:view roles');
+    Route::get('/roles/list', [RoleController::class, 'datatables'])->name('roles.list')->middleware('can:view roles');
+    Route::get('/roles/{id}/', [RoleController::class, 'show'])->name('roles.show')->middleware('can:view roles');
+    Route::post('/roles/{id}/', [RoleController::class, 'update'])->name('roles.update')->middleware('can:update roles');
+    Route::get('/roles/destroy/{id}', [RoleController::class, 'destroy'])->name('roles.destroy')->middleware('can:delete roles');
+    Route::get('/role/add/', [RoleController::class, 'create'])->name('roles.create')->middleware('can:create roles');
+    Route::post('/role/add/', [RoleController::class, 'store'])->name('roles.store')->middleware('can:create roles');
 
-    Route::post('/message/{id}/reply/add',[ReplyController::class,'store'])->name('reply.store')->middleware('can:create replies');
-    Route::get('/message/{id}/reply/destroy',[ReplyController::class,'destroy'])->name('reply.destroy')->middleware('can:destroy replies');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index')->middleware('can:view users');
+    Route::get('/users/list', [UserController::class, 'datatables'])->name('users.list')->middleware('can:view users');
+    Route::get('/users/{id}/show', [UserController::class, 'show'])->name('users.show')->middleware('can:view users');
+    Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update')->middleware('can:update users');
+    Route::get('/users/{id}/destroy', [UserController::class, 'destroy'])->name('users.destroy')->middleware('can:delete users');
+    Route::get('/users/add', [UserController::class, 'create'])->name('users.create')->middleware('can:create users');
+    Route::post('/users/add', [UserController::class, 'store'])->name('users.store')->middleware('can:create users');
 
-    Route::get('/users/report/',[UserReportController::class,'index'])->name('user-report.index')->middleware('can:view statistic');
-    Route::get('/users/report/list',[UserReportController::class,'datatables'])->name('user-report.list')->middleware('can:view statistic');
+    Route::post('/message/{id}/reply/add', [ReplyController::class, 'store'])->name('reply.store')->middleware('can:create replies');
+    Route::get('/message/{id}/reply/destroy', [ReplyController::class, 'destroy'])->name('reply.destroy')->middleware('can:destroy replies');
 
-    Route::get('/types',[MessageTypeController::class,'index'])->name('types.index')->middleware('can:view types');
-    Route::get('/types/list',[MessageTypeController::class,'datatables'])->name('types.list')->middleware('can:view types');
+    Route::get('/users/report/', [UserReportController::class, 'index'])->name('user-report.index')->middleware('can:view statistic');
+    Route::get('/users/report/list', [UserReportController::class, 'datatables'])->name('user-report.list')->middleware('can:view statistic');
 
-    Route::get('/status',[StatusTypeController::class,'index'])->name('status.index')->middleware('can:view statuses');
-    Route::get('/status/list',[StatusTypeController::class,'datatables'])->name('status.list')->middleware('can:view statuses');
+    Route::get('/types', [MessageTypeController::class, 'index'])->name('types.index')->middleware('can:view types');
+    Route::get('/types/list', [MessageTypeController::class, 'datatables'])->name('types.list')->middleware('can:view types');
+
+    Route::get('/status', [StatusTypeController::class, 'index'])->name('status.index')->middleware('can:view statuses');
+    Route::get('/status/list', [StatusTypeController::class, 'datatables'])->name('status.list')->middleware('can:view statuses');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

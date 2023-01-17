@@ -38,57 +38,81 @@ class MessagesController extends Controller
      */
     public function index(Request $request): Factory|View|Application
     {
+        $data['users'] = User::all();
         $data['status'] = StatusType::query();
+        $data['statuses'] = StatusType::all();
         $paramArray = array();
-        if ($request->has('status_id')){
-            $data['status'] = $data['status']->where('type_id','=',$request->input('status_id'));
+        if ($request->has('status_id')) {
+            if ($request->input('status_id') !== 'all') {
+                $data['status'] = $data['status']->where('type_id', '=', $request->input('status_id'));
+            }
             $paramArray['status_id'] = $request->input('status_id');
 
         }
-        if ($request->has('date-range')){
+        if ($request->has('responsible_id')) {
+            if ($request->input('responsible_id') !== 'all') {
+                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
+                    return $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
+                }]);
+            }
+            $paramArray['responsible_id'] = $request->input('responsible_id');
+        }
+        if ($request->has('date-range')) {
             $data['header'] = $request->input('date-range');
             $paramArray['date-range'] = $request->input('date-range');
-            $date = explode(' ',$request->input('date-range'));
-            $data['status'] = $data['status']->withCount(['messages'=> function (Builder $query) use ($date){
-                $query->whereBetween('messages.closed',[$date[0].' 00:00:00',$date[2].' 23:59:59']);
+            $date = explode(' ', $request->input('date-range'));
+            $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($date, $request) {
+                if ($request->has('responsible_id')) {
+                    if ($request->input('responsible_id') !== 'all') {
+                        $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
+                    }
+                }
+                return $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
             }])->get();
 
         } else {
             $data['status'] = $data['status']->withCount('messages')->get();
         }
-        $data['request'] =  route('messages.list',$paramArray);
-        return view('messages',compact('data'));
+        $data['request'] = route('messages.list', $paramArray);
+        return view('messages', compact('data'));
     }
 
     public function datatables(Request $request): ?JsonResponse
     {
         if ($request->ajax()) {
             $data = DB::table('messages as m')
-                ->select(['m.*','a.id as aid','a.name as aname','r.id as rid','r.name as rname','s.type_id as sid','s.name as sname','t.id as tid','t.name as tname']);
-            if ($request->has('status_id')){
-                $data = $data->where('m.status_id','=',$request->input('status_id'));
+                ->select(['m.*', 'a.id as aid', 'a.name as aname', 'r.id as rid', 'r.name as rname', 's.type_id as sid', 's.name as sname', 't.id as tid', 't.name as tname']);
+            if ($request->has('status_id')) {
+                if ($request->status_id !== 'all') {
+                    $data = $data->where('m.status_id', '=', $request->input('status_id'));
+                }
             }
-            if ($request->has('date-range')){
-                $date = explode(' ',$request->input('date-range'));
-                $data = $data->whereBetween('m.closed',[$date[0].' 00:00:00',$date[2].' 23:59:59']);
+            if ($request->has('date-range')) {
+                $date = explode(' ', $request->input('date-range'));
+                $data = $data->whereBetween('m.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
             }
-            if ($request->has('amp;date-range')){
-                $date = explode(' ',$request->input('amp;date-range'));
-                $data = $data->whereBetween('m.closed',[$date[0].' 00:00:00',$date[2].' 23:59:59']);
+            if ($request->has('amp;responsible_id')) {
+                if ($request->input('amp;responsible_id') !== 'all') {
+                    $data->where('m.responsible_id', '=', $request->input('amp;responsible_id'));
+                }
             }
-            $data = $data->leftJoin('users as a','m.admin_id','=','a.id')
-                ->leftJoin('users as r','m.responsible_id','=','r.id')
-                ->leftJoin('status_types as s','m.status_id','=','s.type_id')
-                ->leftJoin('message_types as t','m.type_id','=','t.id');
+            if ($request->has('amp;date-range')) {
+                $date = explode(' ', $request->input('amp;date-range'));
+                $data = $data->whereBetween('m.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            }
+            $data = $data->leftJoin('users as a', 'm.admin_id', '=', 'a.id')
+                ->leftJoin('users as r', 'm.responsible_id', '=', 'r.id')
+                ->leftJoin('status_types as s', 'm.status_id', '=', 's.type_id')
+                ->leftJoin('message_types as t', 'm.type_id', '=', 't.id');
             return DataTables::of($data)
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
 
-                    return "<a href=\"".route('messages.show',$row->id)."\" class=\"btn btn-app\"><i class=\"fas fa-edit\"></i></a>";
+                    return "<a href=\"" . route('messages.show', $row->id) . "\" class=\"btn btn-app\"><i class=\"fas fa-edit\"></i></a>";
                 })
-                ->addColumn('delete', function($row){
-                    return "<a href=\"".route('messages.destroy',$row->id)."\" class=\"btn btn-sm bg-gradient-info\"><i class=\"fas fa-trash-alt\"></i></a>";
+                ->addColumn('delete', function ($row) {
+                    return "<a href=\"" . route('messages.destroy', $row->id) . "\" class=\"btn btn-sm bg-gradient-info\"><i class=\"fas fa-trash-alt\"></i></a>";
                 })
-                ->addColumn('idNumber',function ($row){
+                ->addColumn('idNumber', function ($row) {
                     if (isset($row->uid)) {
                         $uid = "<button data-toggle=\"tooltip\" title=\"ID оборудования\" class=\"btn  btn-sm bg-gradient-success\" ><i class=\"fas fa-satellite-dish\"></i></a>";
                     } else {
@@ -96,46 +120,46 @@ class MessagesController extends Controller
                     }
                     return $uid;
                 })
-                ->addColumn('contractStatus',function ($row){
+                ->addColumn('contractStatus', function ($row) {
                     if ($row->contract == 1) {
                         return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-file-contract\"></i></a>";
-                    }else {
+                    } else {
                         return "<button data-toggle='tooltip' title='Договор' class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-file-contract\"></i></a>";
                     }
                 })
-                ->addColumn('photoStatus',function ($row){
+                ->addColumn('photoStatus', function ($row) {
                     if ($row->photo == 1) {
                         return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-images\"></i></a>";
-                    } else{
+                    } else {
                         return "<button data-toggle='tooltip' title='Фотографии' class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-images\"></i></a>";
                     }
                 })
-                ->editColumn('id', function($row) {
-                    return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->id."</a></span>";
+                ->editColumn('id', function ($row) {
+                    return "<span class=\"username\"><a href=\"" . route('messages.show', $row->id) . "\">" . $row->id . "</a></span>";
                 })
-                ->editColumn('fio', function($row) {
-                    return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->fio."</a></span>";
+                ->editColumn('fio', function ($row) {
+                    return "<span class=\"username\"><a href=\"" . route('messages.show', $row->id) . "\">" . $row->fio . "</a></span>";
                 })
-                ->editColumn('contract', function($row) {
+                ->editColumn('contract', function ($row) {
                     if ($row->contract == 1) {
                         return "<a class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-check\"></i></a>";
                     }
                     return "<a class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-times\"></i></a>";
                 })
-                ->editColumn('photo', function($row) {
+                ->editColumn('photo', function ($row) {
                     if ($row->photo == 1) {
                         return "<a class=\"btn btn-sm bg-gradient-success\"><i class=\"fas fa-check\"></i></a>";
                     }
                     return "<a class=\"btn btn-sm bg-gradient-danger\"><i class=\"fas fa-times\"></i></a>";
-            })
-                ->editColumn('address', function($row) {
-                    return "<span class=\"username\"><a href=\"".route('messages.show',$row->id)."\">".$row->address."</a></span>";
                 })
-                ->editColumn('closed', function($row) {
-                    return '<small>'.$row->closed.'</small>';
+                ->editColumn('address', function ($row) {
+                    return "<span class=\"username\"><a href=\"" . route('messages.show', $row->id) . "\">" . $row->address . "</a></span>";
                 })
-                ->editColumn('plan', function($row) {
-                    return '<small>'.$row->plan.'</small>';
+                ->editColumn('closed', function ($row) {
+                    return '<small>' . $row->closed . '</small>';
+                })
+                ->editColumn('plan', function ($row) {
+                    return '<small>' . $row->plan . '</small>';
                 })
                 ->rawColumns([
                     'id',
@@ -154,7 +178,7 @@ class MessagesController extends Controller
                 ->make(true);
 
         }
-        return  null;
+        return null;
     }
 
     /**
@@ -167,7 +191,7 @@ class MessagesController extends Controller
         $data['types'] = MessageType::all();
         $data['users'] = User::all();
         $data['status'] = StatusType::all();
-        return view('new-message',compact('data'));
+        return view('new-message', compact('data'));
     }
 
     /**
@@ -178,8 +202,8 @@ class MessagesController extends Controller
      */
     public function store(StoreMessagesRequest $request)
     {
-        $message = Messages::create($request->merge(['admin_id'=>auth()->user()->id])->validated());
-        return redirect()->route('messages.index')->with('message_created','Создана заявка с номером: '.$message->id);
+        $message = Messages::create($request->merge(['admin_id' => auth()->user()->id])->validated());
+        return redirect()->route('messages.index')->with('message_created', 'Создана заявка с номером: ' . $message->id);
     }
 
     /**
@@ -189,47 +213,64 @@ class MessagesController extends Controller
      * @param $id
      * @return Application|Factory|View
      */
-    public function show(Messages $messages,$id)
+    public function show(Messages $messages, $id)
     {
         $data['types'] = MessageType::all();
         $data['users'] = User::all();
         $data['status'] = StatusType::all();
-        return view('message-new',[
+        return view('message-new', [
             'data' => $data,
             'message' => $messages->findOrFail($id),
-            'replies' => Reply::query()->with('admin')->where('message_id',$id)->get()
+            'replies' => Reply::query()->with('admin')->where('message_id', $id)->get()
         ]);
     }
 
-    public function showPdf(Messages $messages,$id)
+    public function showPdf(Messages $messages, $id)
     {
         $message = $messages->findOrFail($id);
         $pdf = PDF::loadView('message-pdf', [
             'message' => $message,
-            'replies' => Reply::query()->with('admin')->where('message_id',$id)->get()
+            'replies' => Reply::query()->with('admin')->where('message_id', $id)->get()
         ]);
-        return $pdf->download($message->fio.'.pdf');
+        return $pdf->download($message->fio . '.pdf');
     }
-    public function exportPdf(Messages $messages)
+
+    public function exportPdf(Messages $messages, Request $request)
     {
-        $messages = $messages->where('status_id','=',6)->get();
-        $zip = Zip::create(Carbon::now()->format('Y-m-d-H-i-s').'.zip');
-        foreach ($messages as $message){
+        if ($request->has('date-range')) {
+            $date = explode(' ', $request->input('date-range'));
+            $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+        }
+        if ($request->has('status_id')) {
+            if ($request->input('status_id') !== 'all') {
+                $messages = $messages->where('status_id', '=', $request->input('status_id'));
+            }
+        }
+
+        if ($request->has('responsible_id')) {
+            if ($request->input('responsible_id') !== 'all') {
+                $messages->where('responsible_id', '=', $request->input('responsible_id'));
+            }
+        }
+        $zip = Zip::create(Carbon::now()->format('Y-m-d-H-i-s') . '.zip');
+        foreach ($messages->get() as $message) {
             $pdf = PDF::loadView('message-pdf', [
                 'message' => $message,
-                'replies' => Reply::query()->with('admin')->where('message_id',$message->id)->get()
+                'replies' => Reply::query()->with('admin')->where('message_id', $message->id)->get()
             ]);
-            $zip->addRaw($pdf->stream($message->fio.'.pdf'),$message->fio.'.pdf');
+            $zip->addRaw($pdf->stream($message->fio . '.pdf'), $message->fio . '.pdf');
         }
         return $zip;
     }
-    public function exportExcel(Messages $messages)
+
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new MessagesExport, 'report.xlsx');
+        return Excel::download(new MessagesExport($request->input('date-range'), $request->input('status_id'), $request->input('responsible_id')), Carbon::now()->format('Y-m-d-H-i-s') . '.xlsx');
     }
+
     public function importExcel(Request $request)
     {
-        Excel::import(new MessagesImport,$request->file('file'));
+        Excel::import(new MessagesImport, $request->file('file'));
         return redirect('/')->with('message_created', 'Импортировано');
     }
 
@@ -252,26 +293,49 @@ class MessagesController extends Controller
      * @param $id
      * @return RedirectResponse
      */
-    public function update(UpdateMessagesRequest $request, Messages $messages,$id)
+    public function update(UpdateMessagesRequest $request, Messages $messages, $id)
     {
         $message = $messages->findOrFail($id);
-        if((string)$message->status_id === "5"){
-            if(auth()->user()->id !== 1){
-                abort(403,'Попытка изменения заявки! Действие запрещено!');
+        if ((string)$message->status_id === "5") {
+            if (auth()->user()->id !== 1) {
+                abort(403, 'Попытка изменения заявки! Действие запрещено!');
             }
         }
-        if((string)$request->status_id === "5" or (string)$request->status_id === "6" or  (string)$request->status_id === "7" ){
-            if(!auth()->user()->hasRole(['admin','Super Admin'])){
-                abort(403,'Действие запрещено!');
+        if ((string)$request->status_id === "5" or (string)$request->status_id === "6" or (string)$request->status_id === "7") {
+            if (!auth()->user()->hasRole(['admin', 'Super Admin'])) {
+                abort(403, 'Действие запрещено!');
             }
         }
         $message->update($request->validated());
         if ((string)$request->status_id === "1") {
             $message->update(['closed' => Carbon::now()->format('Y-m-d H:i:s')]);
-        } elseif((string)$request->status_id === "0") {
-            $message->update(['closed' => '0000-00-00 00:00:00' ]);
+        } elseif ((string)$request->status_id === "0") {
+            $message->update(['closed' => '0000-00-00 00:00:00']);
         }
-        return redirect()->back()->with('message','Заявка изменена!');
+        return redirect()->back()->with('message', 'Заявка изменена!');
+    }
+
+    public function updateMessages(Request $request, Messages $messages,)
+    {
+        if ($request->has('date-range')) {
+            $date = explode(' ', $request->input('date-range'));
+            $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+        }
+        if ($request->has('responsible_id')) {
+            $messages = $messages->where('responsible_id', '=', $request->input('responsible_id'));
+        }
+        if ($request->has('status_id')) {
+            $messages = $messages->where('status_id', '=', $request->input('status_id'));
+        }
+        if ($request->has('date-range') or $request->has('responsible_id') or $request->has('status_id')) {
+            if ((string)$request->input('update_status_id') === "1") {
+                $messages->update(['closed' => Carbon::now()->format('Y-m-d H:i:s')]);
+            } elseif ((string)$request->input('update_status_id') === "0") {
+                $messages->update(['closed' => '0000-00-00 00:00:00']);
+            }
+            $messages->update(['status_id' => $request->input('update_status_id')]);
+        }
+        return redirect()->route('messages.index');
     }
 
     /**
@@ -282,9 +346,9 @@ class MessagesController extends Controller
      * @return RedirectResponse
      * @throws Throwable
      */
-    public function destroy(Messages $messages,$id)
+    public function destroy(Messages $messages, $id)
     {
         $messages->findOrFail($id)->delete();
-        return redirect('/')->with('message_created','Заявка #'.$id.' удалена');
+        return redirect('/')->with('message_created', 'Заявка #' . $id . ' удалена');
     }
 }
