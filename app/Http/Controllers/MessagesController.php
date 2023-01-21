@@ -11,6 +11,7 @@ use App\Models\MessageType;
 use App\Models\Reply;
 use App\Models\StatusType;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -203,6 +204,9 @@ class MessagesController extends Controller
     public function store(StoreMessagesRequest $request)
     {
         $message = Messages::create($request->merge(['admin_id' => auth()->user()->id])->validated());
+        if (Auth::user()->hasRole('writer')) {
+            return redirect()->route('messages.create')->with('message_created', 'Создана заявка с номером: ' . $message->id);
+        }
         return redirect()->route('messages.index')->with('message_created', 'Создана заявка с номером: ' . $message->id);
     }
 

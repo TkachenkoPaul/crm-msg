@@ -10,6 +10,15 @@
                     </ol>
                 </div>
             </div>
+            @if (session('message_created'))
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success">
+                            {{ session('message_created') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
     <!-- Main content -->

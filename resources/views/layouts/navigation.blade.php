@@ -24,12 +24,14 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="{{ route('messages.index') }}" class="nav-link">
-                        <i class="far fa-comments nav-icon"></i>
-                        <p>Заявки</p>
-                    </a>
-                </li>
+                @can('view messages')
+                    <li class="nav-item">
+                        <a href="{{ route('messages.index') }}" class="nav-link">
+                            <i class="far fa-comments nav-icon"></i>
+                            <p>Заявки</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('view roles')
                     <li class="nav-item">
                         <a href="{{ route('operations.index') }}" class="nav-link ">
