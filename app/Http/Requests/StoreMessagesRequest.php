@@ -29,7 +29,7 @@ class StoreMessagesRequest extends FormRequest
             'house' => 'required|string|min:1|max:10',
             'phone' => 'required|string|min:6|max:15',
             'type_id' => 'nullable|integer|exists:message_types,id',
-            'responsible_id' => 'required|integer|exists:users,id',
+            'responsible_id' => 'nullable|integer|exists:users,id',
             'uid' => 'nullable|digits:14|unique:messages,uid',
             'contract' => 'digits:1',
             'admin_id' => ''

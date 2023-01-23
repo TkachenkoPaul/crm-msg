@@ -88,7 +88,8 @@
                                 <div class="form-group">
                                     <label for="responsible_id">Ответственный</label>
                                     <select class="custom-select form-control-border border-width-2" id="responsible_id"
-                                            required name="responsible_id">
+                                            name="responsible_id">
+                                        <option disabled selected value> -- Выбрать --</option>
                                         @if (isset($data['users']))
                                             @foreach ($data['users'] as $user)
                                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
