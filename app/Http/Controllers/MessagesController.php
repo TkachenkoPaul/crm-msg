@@ -195,6 +195,14 @@ class MessagesController extends Controller
         return view('new-message', compact('data'));
     }
 
+    public function createRegions()
+    {
+        $data['types'] = MessageType::all();
+        $data['users'] = User::all();
+        $data['status'] = StatusType::all();
+        return view('new-message-regions', compact('data'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -205,7 +213,7 @@ class MessagesController extends Controller
     {
         $message = Messages::create($request->merge(['admin_id' => auth()->user()->id])->validated());
         if (Auth::user()->hasRole('writer')) {
-            return redirect()->route('messages.create')->with('message_created', 'Создана заявка с номером: ' . $message->id);
+            return redirect()->back()->with('message_created', 'Создана заявка с номером: ' . $message->id);
         }
         return redirect()->route('messages.index')->with('message_created', 'Создана заявка с номером: ' . $message->id);
     }

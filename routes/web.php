@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages/update/', [MessagesController::class, 'updateMessages'])->name('messages.update.group')->middleware('can:view roles');
     Route::get('/message/delete/{id}/', [MessagesController::class, 'destroy'])->name('messages.destroy')->middleware('can:delete messages');
     Route::get('/messages/add', [MessagesController::class, 'create'])->name('messages.create')->middleware('can:create messages');
+    Route::get('/messages/regions/add', [MessagesController::class, 'createRegions'])->name('messages.create.regions')->middleware('can:create messages');
     Route::post('/messages/add', [MessagesController::class, 'store'])->name('messages.store')->middleware('can:create messages');
 
     Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');

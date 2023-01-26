@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         if (Auth::user()->hasRole('writer')) {
-            return redirect()->route('messages.create');
+            return redirect()->route('messages.create.regions');
         }
         return redirect()->intended(RouteServiceProvider::HOME);
     }
