@@ -17,7 +17,6 @@ class MessagesImport implements ToModel, WithValidation
      */
     public function model(array $row): Messages|Model|null
     {
-        dump($row);
         return new Messages([
             'fio' => $row[0],
             'address' => $row[1],
