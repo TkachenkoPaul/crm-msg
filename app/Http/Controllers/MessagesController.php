@@ -42,6 +42,7 @@ class MessagesController extends Controller
         $data['users'] = User::all();
         $data['status'] = StatusType::query();
         $data['statuses'] = StatusType::all();
+        dump(auth()->user()->id);
         if ($request->has('status_id')) {
             if ($request->input('status_id') !== 'all') {
                 $data['status'] = $data['status']->where('type_id', '=', $request->input('status_id'));
@@ -65,35 +66,6 @@ class MessagesController extends Controller
             }
             return $query;
         }]);
-//        if ($request->has('responsible_id')) {
-//            if ($request->input('responsible_id') !== 'all') {
-//                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
-//                    return $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
-//                }]);
-//            }
-//        }
-//        if ($request->has('updated_at')) {
-//            if ($request->input('updated_at') !== null) {
-//                dump($request->input('updated_at'));
-//                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
-//                    return $query->whereBetween('messages.updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
-//                }]);
-//            }
-//        }
-//        if ($request->has('date-range')) {
-//            $data['header'] = $request->input('date-range');
-//            $date = explode(' ', $request->input('date-range'));
-//            $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($date, $request) {
-//                if ($request->has('responsible_id')) {
-//                    if ($request->input('responsible_id') !== 'all') {
-//                        $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
-//                    }
-//                }
-//                return $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
-//            }])->get();
-//        } else {
-//            $data['status'] = $data['status']->withCount('messages')->get();
-//        }
         $data['status'] = $data['status']->get();
         $data['request'] = route('messages.list', $request->all());
         return view('messages', compact('data'));
@@ -241,7 +213,7 @@ class MessagesController extends Controller
      */
     public function store(StoreMessagesRequest $request)
     {
-        $message = Messages::create($request->merge(['admin_id' => auth()->user()->id])->validated());
+        $message = Messages::create(array_merge($request->validated(), ['admin_id' => auth()->user()->id]));
         if (Auth::user()->hasRole('writer')) {
             return redirect()->back()->with('message_created', 'Создана заявка с номером: ' . $message->id);
         }
