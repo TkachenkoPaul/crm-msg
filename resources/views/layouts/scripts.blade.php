@@ -105,6 +105,52 @@
                 firstDay: 1,
             },
         })
+        $('#reservation2').datetimepicker({
+            format: 'YYYY-MM-DD',
+        });
+        $('#reservation3').daterangepicker({
+            ranges: {
+                'Сегодня': [moment(), moment()],
+                'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Неделя': [moment().startOf('isoWeek'), moment().endOf('isoWeek')],
+                'Месяц': [moment().startOf('month'), moment().endOf('month')],
+                'Последние 7 дей': [moment().subtract(6, 'days'), moment()],
+                'Последние 30 дней': [moment().subtract(29, 'days'), moment()],
+                'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                    'month').endOf('month')]
+            },
+            alwaysShowCalendars: true,
+            showDropdowns: true,
+            locale: {
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Очистить',
+                applyLabel: 'Принять',
+                "daysOfWeek": [
+                    "Вс",
+                    "Пн",
+                    "Вт",
+                    "Ср",
+                    "Чт",
+                    "Пт",
+                    "Сб"
+                ],
+                "monthNames": [
+                    "Январь",
+                    "Февраль",
+                    "Март",
+                    "Апрель",
+                    "Май",
+                    "Июнь",
+                    "Июль",
+                    "Август",
+                    "Сентябрь",
+                    "Октябрь",
+                    "Ноябрь",
+                    "Декабрь"
+                ],
+                firstDay: 1,
+            },
+        })
 
         @if (isset($message))
         @if ($message->plan)
@@ -215,6 +261,10 @@
                     name: 'm.closed',
                 },
                 {
+                    data: 'updated_at',
+                    name: 'm.updated_at',
+                },
+                {
                     data: 'plan',
                     name: 'm.plan'
                 },
@@ -222,6 +272,138 @@
                     data: 'uid',
                     name: 'm.uid',
                     visible: false,
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 1,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 3,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 4,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 5,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 6,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 8,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 9,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: -3,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -2,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+
+            ],
+
+        });
+        let appeals = $('.yajra-datatable-appeals').DataTable({
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+
+            },
+            autoWidth: false,
+            pagingType: 'simple_numbers',
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            lengthMenu: [[50, 100, -1], [50, 100, "Все"]],
+            ajax: "{{ route('appeals.list') }}",
+            autoFill: {
+                enable: true
+            },
+            order: [
+                [0, 'desc']
+            ],
+            columns: [
+                {
+                    data: 'id',
+                    name: 'a.id'
+                },
+                {
+                    data: 'fio',
+                    name: 'm.fio'
+                },
+                {
+                    data: 'address',
+                    name: 'a.address'
+                },
+                {
+                    data: 'house',
+                    name: 'a.house'
+                },
+                {
+                    data: 'phone',
+                    name: 'a.phone'
+                },
+                {
+                    data: 'ip',
+                    name: 'a.ip'
+                },
+                {
+                    data: 'agreed',
+                    name: 'a.agreed'
+                },
+                {
+                    data: 'created_at',
+                    name: 'a.created_at',
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'delete',
+                    name: 'delete',
+                    orderable: false,
+                    searchable: false
                 },
             ],
             columnDefs: [

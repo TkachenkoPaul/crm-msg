@@ -101,6 +101,10 @@
                                             <li class="nav-item mr-2 mt-2">
                                                 <form action="{{ route('messages.show.all.excel') }}"
                                                       method="GET">
+                                                    @if(isset($_GET['updated_at']))
+                                                        <input type="hidden" name="updated_at"
+                                                               value="{{ $_GET['updated_at'] }}">
+                                                    @endif
                                                     @if(isset($_GET['date-range']))
                                                         <input type="hidden" name="date-range"
                                                                value="{{ $_GET['date-range'] }}">
@@ -122,6 +126,10 @@
                                             <li class="nav-item mr-2 mt-2">
                                                 <form action="{{ route('messages.show.all.pdf') }}"
                                                       method="GET">
+                                                    @if(isset($_GET['updated_at']))
+                                                        <input type="hidden" name="updated_at"
+                                                               value="{{ $_GET['updated_at'] }}">
+                                                    @endif
                                                     @if(isset($_GET['date-range']))
                                                         <input type="hidden" name="date-range"
                                                                value="{{ $_GET['date-range'] }}">
@@ -172,6 +180,19 @@
                                             <!-- /.input group -->
                                         </div>
                                         <div class="form-group mb-2 mr-2">
+                                            <label for="reservation2">Дата изменения: </label>
+                                            <div class="input-group" id="reservation2"
+                                                 data-target-input="nearest">
+                                                <div class="input-group" data-target="#reservation2"
+                                                     data-toggle="datetimepicker">
+                                                    <input id="plan" type="text"
+                                                           class="form-control form-control-border border-width-2"
+                                                           data-target="#reservation2" name="updated_at"/>
+                                                </div>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                        <div class="form-group mb-2 mr-2">
                                             <label for="status_id">Статус: </label>
                                             <select class="custom-select form-control-border border-width-2"
                                                     id="status_id"
@@ -207,6 +228,9 @@
                                     </form>
                                     <form class="form-inline" action="{{ route('messages.update.group') }}"
                                           method="GET">
+                                        @if(isset($_GET['updated_at']))
+                                            <input type="hidden" name="updated_at" value="{{ $_GET['updated_at'] }}">
+                                        @endif
                                         @if(isset($_GET['date-range']))
                                             <input type="hidden" name="date-range" value="{{ $_GET['date-range'] }}">
                                         @endif
@@ -255,6 +279,7 @@
                                     <th data-priority="4"></th>
                                     <th data-priority="5"></th>
                                     <th><small>Закрыта</small></th>
+                                    <th><small>Изменена</small></th>
                                     <th><small>Запланировано</small></th>
                                     <th><small>uid</small></th>
                                 </tr>

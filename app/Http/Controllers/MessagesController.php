@@ -42,39 +42,60 @@ class MessagesController extends Controller
         $data['users'] = User::all();
         $data['status'] = StatusType::query();
         $data['statuses'] = StatusType::all();
-        $paramArray = array();
         if ($request->has('status_id')) {
             if ($request->input('status_id') !== 'all') {
                 $data['status'] = $data['status']->where('type_id', '=', $request->input('status_id'));
             }
-            $paramArray['status_id'] = $request->input('status_id');
-
         }
-        if ($request->has('responsible_id')) {
-            if ($request->input('responsible_id') !== 'all') {
-                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
-                    return $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
-                }]);
-            }
-            $paramArray['responsible_id'] = $request->input('responsible_id');
-        }
-        if ($request->has('date-range')) {
-            $data['header'] = $request->input('date-range');
-            $paramArray['date-range'] = $request->input('date-range');
-            $date = explode(' ', $request->input('date-range'));
-            $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($date, $request) {
-                if ($request->has('responsible_id')) {
-                    if ($request->input('responsible_id') !== 'all') {
-                        $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
-                    }
+        $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
+            if ($request->has('responsible_id')) {
+                if ($request->input('responsible_id') !== 'all') {
+                    $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
                 }
-                return $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
-            }])->get();
-
-        } else {
-            $data['status'] = $data['status']->withCount('messages')->get();
-        }
-        $data['request'] = route('messages.list', $paramArray);
+            }
+            if ($request->has('updated_at')) {
+                if ($request->input('updated_at') !== null) {
+                    $query = $query->whereBetween('messages.updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+                }
+            }
+            if ($request->has('date-range')) {
+                $data['header'] = $request->input('date-range');
+                $date = explode(' ', $request->input('date-range'));
+                $query = $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            }
+            return $query;
+        }]);
+//        if ($request->has('responsible_id')) {
+//            if ($request->input('responsible_id') !== 'all') {
+//                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
+//                    return $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
+//                }]);
+//            }
+//        }
+//        if ($request->has('updated_at')) {
+//            if ($request->input('updated_at') !== null) {
+//                dump($request->input('updated_at'));
+//                $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($request) {
+//                    return $query->whereBetween('messages.updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+//                }]);
+//            }
+//        }
+//        if ($request->has('date-range')) {
+//            $data['header'] = $request->input('date-range');
+//            $date = explode(' ', $request->input('date-range'));
+//            $data['status'] = $data['status']->withCount(['messages' => function (Builder $query) use ($date, $request) {
+//                if ($request->has('responsible_id')) {
+//                    if ($request->input('responsible_id') !== 'all') {
+//                        $query = $query->where('messages.responsible_id', '=', $request->input('responsible_id'));
+//                    }
+//                }
+//                return $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+//            }])->get();
+//        } else {
+//            $data['status'] = $data['status']->withCount('messages')->get();
+//        }
+        $data['status'] = $data['status']->get();
+        $data['request'] = route('messages.list', $request->all());
         return view('messages', compact('data'));
     }
 
@@ -94,7 +115,12 @@ class MessagesController extends Controller
             }
             if ($request->has('amp;responsible_id')) {
                 if ($request->input('amp;responsible_id') !== 'all') {
-                    $data->where('m.responsible_id', '=', $request->input('amp;responsible_id'));
+                    $data = $data->where('m.responsible_id', '=', $request->input('amp;responsible_id'));
+                }
+            }
+            if ($request->has('amp;updated_at')) {
+                if ($request->input('amp;updated_at') !== null) {
+                    $data = $data->whereBetween('m.updated_at', [$request->input('amp;updated_at') . ' 00:00:00', $request->input('amp;updated_at') . ' 23:59:59']);
                 }
             }
             if ($request->has('amp;date-range')) {
@@ -159,6 +185,9 @@ class MessagesController extends Controller
                 ->editColumn('closed', function ($row) {
                     return '<small>' . $row->closed . '</small>';
                 })
+                ->editColumn('updated_at', function ($row) {
+                    return '<small>' . $row->updated_at . '</small>';
+                })
                 ->editColumn('plan', function ($row) {
                     return '<small>' . $row->plan . '</small>';
                 })
@@ -174,6 +203,7 @@ class MessagesController extends Controller
                     'contractStatus',
                     'photoStatus',
                     'closed',
+                    'updated_at',
                     'plan',
                 ])
                 ->make(true);
@@ -253,12 +283,14 @@ class MessagesController extends Controller
             $date = explode(' ', $request->input('date-range'));
             $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
         }
+        if ($request->has('updated_at')) {
+            $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+        }
         if ($request->has('status_id')) {
             if ($request->input('status_id') !== 'all') {
                 $messages = $messages->where('status_id', '=', $request->input('status_id'));
             }
         }
-
         if ($request->has('responsible_id')) {
             if ($request->input('responsible_id') !== 'all') {
                 $messages->where('responsible_id', '=', $request->input('responsible_id'));
@@ -277,7 +309,7 @@ class MessagesController extends Controller
 
     public function exportExcel(Request $request)
     {
-        return Excel::download(new MessagesExport($request->input('date-range'), $request->input('status_id'), $request->input('responsible_id')), Carbon::now()->format('Y-m-d-H-i-s') . '.xlsx');
+        return Excel::download(new MessagesExport($request->input('date-range'), $request->input('status_id'), $request->input('responsible_id'), $request->input('updated_at')), Carbon::now()->format('Y-m-d-H-i-s') . '.xlsx');
     }
 
     public function importExcel(Request $request)
@@ -329,6 +361,9 @@ class MessagesController extends Controller
 
     public function updateMessages(Request $request, Messages $messages,)
     {
+        if ($request->has('updated_at')) {
+            $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+        }
         if ($request->has('date-range')) {
             $date = explode(' ', $request->input('date-range'));
             $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);

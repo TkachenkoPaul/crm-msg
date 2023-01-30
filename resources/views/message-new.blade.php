@@ -227,6 +227,21 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="admin_id" class="text-muted">Добавил</label>
+                                    @if (isset($data['users']))
+                                        @if(!isset($message->admin_id))
+                                            <input class="form-control form-control-border border-width-2" id="admin_id"
+                                                   value="Не указан">
+                                        @endif
+                                        @foreach ($data['users'] as $user)
+                                            @if($message->admin_id === $user->id)
+                                                <input class="form-control form-control-border border-width-2"
+                                                       id="admin_id" value="{{ $user->name }}">
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <div class="form-group">
                                     <label for="responsible_id" class="text-muted">Исполнитель</label>
                                     <select class="custom-select form-control-border border-width-2"
                                             id="responsible_id" required name="responsible_id">

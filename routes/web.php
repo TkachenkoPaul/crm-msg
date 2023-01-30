@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppealController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\MessageTypeController;
 use App\Http\Controllers\OperationController;
@@ -34,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages/add', [MessagesController::class, 'create'])->name('messages.create')->middleware('can:create messages');
     Route::get('/messages/regions/add', [MessagesController::class, 'createRegions'])->name('messages.create.regions')->middleware('can:create messages');
     Route::post('/messages/add', [MessagesController::class, 'store'])->name('messages.store')->middleware('can:create messages');
+
+    Route::get('/appeals', [AppealController::class, 'index'])->name('appeals.index')->middleware('can:view messages');
+    Route::get('/appeals/list', [AppealController::class, 'datatables'])->name('appeals.list')->middleware('can:view messages');
+    Route::get('/appeal/delete/{id}/', [AppealController::class, 'destroy'])->name('appeals.destroy')->middleware('can:delete messages');
+    Route::get('/appeal/accept/{id}/', [AppealController::class, 'accept'])->name('appeals.accept')->middleware('can:view messages');
 
     Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');
     Route::get('/messages/operations/list', [OperationController::class, 'datatables'])->name('operations.list')->middleware('can:view roles');

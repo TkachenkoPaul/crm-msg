@@ -32,6 +32,14 @@
                         </a>
                     </li>
                 @endcan
+                @can('view messages')
+                    <li class="nav-item">
+                        <a href="{{ route('appeals.index') }}" class="nav-link">
+                            <i class="far fa-comment nav-icon"></i>
+                            <p>Обращения</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('view roles')
                     <li class="nav-item">
                         <a href="{{ route('operations.index') }}" class="nav-link ">
