@@ -42,7 +42,6 @@ class MessagesController extends Controller
         $data['users'] = User::all();
         $data['status'] = StatusType::query();
         $data['statuses'] = StatusType::all();
-        dump(auth()->user()->id);
         if ($request->has('status_id')) {
             if ($request->input('status_id') !== 'all') {
                 $data['status'] = $data['status']->where('type_id', '=', $request->input('status_id'));
