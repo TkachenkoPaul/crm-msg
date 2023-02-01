@@ -75,6 +75,11 @@ class MessagesController extends Controller
         if ($request->ajax()) {
             $data = DB::table('messages as m')
                 ->select(['m.*', 'a.id as aid', 'a.name as aname', 'r.id as rid', 'r.name as rname', 's.type_id as sid', 's.name as sname', 't.id as tid', 't.name as tname']);
+            if ($request->has('status_id')) {
+                if ($request->input('status_id') !== 'all') {
+                    $data = $data->where('m.status_id', '=', $request->input('status_id'));
+                }
+            }
             if ($request->has('amp;status_id')) {
                 if ($request->input('amp;status_id') !== 'all') {
                     $data = $data->where('m.status_id', '=', $request->input('amp;status_id'));
@@ -313,13 +318,13 @@ class MessagesController extends Controller
     public function update(UpdateMessagesRequest $request, Messages $messages, $id)
     {
         $message = $messages->findOrFail($id);
-        if ((string)$message->status_id === "5") {
-            if (auth()->user()->id !== 1) {
-                abort(403, 'Попытка изменения заявки! Действие запрещено!');
-            }
-        }
+//        if ((string)$message->status_id === "5") {
+//            if (auth()->user()->id !== 1) {
+//                abort(403, 'Попытка изменения заявки! Действие запрещено!');
+//            }
+//        }
         if ((string)$request->status_id === "5" or (string)$request->status_id === "6" or (string)$request->status_id === "7") {
-            if (!auth()->user()->hasRole(['admin', 'Super Admin'])) {
+            if (!auth()->user()->hasRole(['Super Admin', 'admin', 'operator'])) {
                 abort(403, 'Действие запрещено!');
             }
         }
