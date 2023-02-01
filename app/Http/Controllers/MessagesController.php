@@ -75,9 +75,9 @@ class MessagesController extends Controller
         if ($request->ajax()) {
             $data = DB::table('messages as m')
                 ->select(['m.*', 'a.id as aid', 'a.name as aname', 'r.id as rid', 'r.name as rname', 's.type_id as sid', 's.name as sname', 't.id as tid', 't.name as tname']);
-            if ($request->has('status_id')) {
-                if ($request->status_id !== 'all') {
-                    $data = $data->where('m.status_id', '=', $request->input('status_id'));
+            if ($request->has('amp;status_id')) {
+                if ($request->input('amp;status_id') !== 'all') {
+                    $data = $data->where('m.status_id', '=', $request->input('amp;status_id'));
                 }
             }
             if ($request->has('date-range')) {
@@ -255,7 +255,9 @@ class MessagesController extends Controller
             $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
         }
         if ($request->has('updated_at')) {
-            $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+            if ($request->input('updated_at') != null) {
+                $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+            }
         }
         if ($request->has('status_id')) {
             if ($request->input('status_id') !== 'all') {
@@ -333,7 +335,9 @@ class MessagesController extends Controller
     public function updateMessages(Request $request, Messages $messages,)
     {
         if ($request->has('updated_at')) {
-            $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+            if ($request->input('updated_at') != null) {
+                $messages = $messages->whereBetween('updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
+            }
         }
         if ($request->has('date-range')) {
             $date = explode(' ', $request->input('date-range'));
