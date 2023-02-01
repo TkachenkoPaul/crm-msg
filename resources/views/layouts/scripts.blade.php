@@ -61,8 +61,9 @@
 
         //Date range picker
         $('#reservation').daterangepicker({
-            startDate: moment().startOf('month'),
-            endDate: moment().endOf('month'),
+            // startDate: moment().startOf('month'),
+            // endDate: moment().endOf('month'),
+            autoUpdateInput: false,
             ranges: {
                 'Сегодня': [moment(), moment()],
                 'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -105,6 +106,13 @@
                 firstDay: 1,
             },
         })
+        $('#reservation').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $('#reservation').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
         $('#reservation2').datetimepicker({
             format: 'YYYY-MM-DD',
         });

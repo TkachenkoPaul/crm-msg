@@ -60,8 +60,10 @@ class MessagesController extends Controller
             }
             if ($request->has('date-range')) {
                 $data['header'] = $request->input('date-range');
-                $date = explode(' ', $request->input('date-range'));
-                $query = $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+                if ($request->input('date-range') !== null) {
+                    $date = explode(' ', $request->input('date-range'));
+                    $query = $query->whereBetween('messages.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+                }
             }
             return $query;
         }]);
@@ -86,8 +88,10 @@ class MessagesController extends Controller
                 }
             }
             if ($request->has('date-range')) {
-                $date = explode(' ', $request->input('date-range'));
-                $data = $data->whereBetween('m.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+                if ($request->input('date-range') !== null) {
+                    $date = explode(' ', $request->input('date-range'));
+                    $data = $data->whereBetween('m.closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+                }
             }
             if ($request->has('amp;responsible_id')) {
                 if ($request->input('amp;responsible_id') !== 'all') {
@@ -97,6 +101,11 @@ class MessagesController extends Controller
             if ($request->has('amp;updated_at')) {
                 if ($request->input('amp;updated_at') !== null) {
                     $data = $data->whereBetween('m.updated_at', [$request->input('amp;updated_at') . ' 00:00:00', $request->input('amp;updated_at') . ' 23:59:59']);
+                }
+            }
+            if ($request->has('updated_at')) {
+                if ($request->input('updated_at') !== null) {
+                    $data = $data->whereBetween('m.updated_at', [$request->input('updated_at') . ' 00:00:00', $request->input('updated_at') . ' 23:59:59']);
                 }
             }
             if ($request->has('amp;date-range')) {
@@ -256,8 +265,10 @@ class MessagesController extends Controller
     public function exportPdf(Messages $messages, Request $request)
     {
         if ($request->has('date-range')) {
-            $date = explode(' ', $request->input('date-range'));
-            $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            if ($request->input('date-range') !== null) {
+                $date = explode(' ', $request->input('date-range'));
+                $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            }
         }
         if ($request->has('updated_at')) {
             if ($request->input('updated_at') != null) {
@@ -337,7 +348,7 @@ class MessagesController extends Controller
         return redirect()->back()->with('message', 'Заявка изменена!');
     }
 
-    public function updateMessages(Request $request, Messages $messages,)
+    public function updateMessages(Request $request, Messages $messages)
     {
         if ($request->has('updated_at')) {
             if ($request->input('updated_at') != null) {
@@ -345,14 +356,20 @@ class MessagesController extends Controller
             }
         }
         if ($request->has('date-range')) {
-            $date = explode(' ', $request->input('date-range'));
-            $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            if ($request->input('date-range') !== null) {
+                $date = explode(' ', $request->input('date-range'));
+                $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);
+            }
         }
         if ($request->has('responsible_id')) {
-            $messages = $messages->where('responsible_id', '=', $request->input('responsible_id'));
+            if ($request->input('responsible_id') !== 'all') {
+                $messages = $messages->where('responsible_id', '=', $request->input('responsible_id'));
+            }
         }
         if ($request->has('status_id')) {
-            $messages = $messages->where('status_id', '=', $request->input('status_id'));
+            if ($request->input('status_id') !== 'all') {
+                $messages = $messages->where('status_id', '=', $request->input('status_id'));
+            }
         }
         if ($request->has('date-range') or $request->has('responsible_id') or $request->has('status_id')) {
             if ((string)$request->input('update_status_id') === "1") {
