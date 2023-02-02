@@ -41,8 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/appeal/delete/{id}/', [AppealController::class, 'destroy'])->name('appeals.destroy')->middleware('can:delete messages');
     Route::get('/appeal/accept/{id}/', [AppealController::class, 'accept'])->name('appeals.accept')->middleware('can:view messages');
 
-    Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');
-    Route::get('/messages/operations/list', [OperationController::class, 'datatables'])->name('operations.list')->middleware('can:view roles');
+//    Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');
+//    Route::get('/messages/operations/list', [OperationController::class, 'datatables'])->name('operations.list')->middleware('can:view roles');
 
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index')->middleware('can:view roles');
     Route::get('/roles/list', [RoleController::class, 'datatables'])->name('roles.list')->middleware('can:view roles');

@@ -36,18 +36,21 @@
                     <li class="nav-item">
                         <a href="{{ route('appeals.index') }}" class="nav-link">
                             <i class="far fa-comment nav-icon"></i>
+                            @if($appeals->count() > 0)
+                                <span class="badge badge-success navbar-badge">{{ $appeals->count() }}</span>
+                            @endif
                             <p>Обращения</p>
                         </a>
                     </li>
                 @endcan
-                @can('view roles')
-                    <li class="nav-item">
-                        <a href="{{ route('operations.index') }}" class="nav-link ">
-                            <i class="fas fa-tasks nav-icon"></i>
-                            <p>Операции</p>
-                        </a>
-                    </li>
-                @endcan
+                {{--                @can('view roles')--}}
+                {{--                    <li class="nav-item">--}}
+                {{--                        <a href="{{ route('operations.index') }}" class="nav-link ">--}}
+                {{--                            <i class="fas fa-tasks nav-icon"></i>--}}
+                {{--                            <p>Операции</p>--}}
+                {{--                        </a>--}}
+                {{--                    </li>--}}
+                {{--                @endcan--}}
                 @can('view statistic')
                     <li class="nav-item">
                         <a href="{{ route('user-report.index') }}" class="nav-link">
