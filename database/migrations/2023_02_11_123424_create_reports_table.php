@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->integer('admin_id');
-            $table->text('name');
-            $table->text('desc');
+            $table->text('name')->nullable();
+            $table->text('desc')->nullable();
             $table->text('file')->nullable();
             $table->text('path')->nullable();
             $table->text('size')->nullable();
