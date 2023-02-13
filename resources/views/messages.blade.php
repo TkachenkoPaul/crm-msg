@@ -156,9 +156,9 @@
                                             {{--                                                </li>--}}
 
                                             <li class="nav-item mr-2 mt-2">
-                                                <button type="button" class="btn btn-info float-right"
+                                                <button type="button" class="btn bg-gradient-primary float-right"
                                                         data-toggle="modal" data-target="#modal-queue"><i
-                                                        class="far fa-file-excel"></i> Отчет
+                                                        class="far fa-file-archive"></i> Отчет
                                                 </button>
                                             </li>
                                             <li class="nav-item mr-2 mt-2">
@@ -181,7 +181,7 @@
                                                                value="{{ $_GET['responsible_id'] }}">
                                                     @endif
                                                     <button type="submit"
-                                                            class="btn bg-gradient-success elevation-2"><i
+                                                            class="btn  bg-gradient-primary elevation-2"><i
                                                             class="far fa-file-excel"></i> Excel
                                                     </button>
                                                 </form>
@@ -206,7 +206,7 @@
                                                                value="{{ $_GET['responsible_id'] }}">
                                                     @endif
                                                     <button type="submit"
-                                                            class="btn bg-gradient-danger elevation-2"><i
+                                                            class="btn bg-gradient-primary elevation-2"><i
                                                             class="far fa-file-pdf"></i> Pdf
                                                     </button>
                                                 </form>
@@ -215,14 +215,14 @@
                                     @endcan
                                     @can('create messages')
                                         <li class="nav-item mr-2 mt-2">
-                                            <button type="button" class="btn btn-info float-right"
+                                            <button type="button" class="btn bg-gradient-primary float-right"
                                                     data-toggle="modal" data-target="#modal-default"><i
                                                     class="far fa-file-excel"></i> Импорт
                                             </button>
                                         </li>
                                         <li class="nav-item mr-2 mt-2">
                                             <a href="{{ route('messages.create') }}"
-                                               class="btn btn-primary">Добавить</a>
+                                               class="btn bg-gradient-primary">Добавить</a>
                                         </li>
                                     @endcan
                                 </ul>
