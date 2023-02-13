@@ -331,6 +331,145 @@
             ],
 
         });
+        let reports = $('.yajra-datatable-reports').DataTable({
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+
+            },
+            autoWidth: false,
+            pagingType: 'simple_numbers',
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            lengthMenu: [[50, 100, -1], [50, 100, "Все"]],
+            ajax: "{{ route('reports.list') }}",
+            autoFill: {
+                enable: true
+            },
+            order: [
+                [0, 'desc']
+            ],
+            columns: [
+                {
+                    data: 'id',
+                    name: 'r.id'
+                },
+                {
+                    data: 'aname',
+                    name: 'a.name'
+                },
+                {
+                    data: 'name',
+                    name: 'r.name'
+                },
+                {
+                    data: 'desc',
+                    name: 'r.desc'
+                },
+                {
+                    data: 'count',
+                    name: 'r.count'
+                },
+                {
+                    data: 'file',
+                    name: 'r.file'
+                },
+                {
+                    data: 'size',
+                    name: 'size'
+                },
+                {
+                    data: 'progress',
+                    name: 'progress',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'created_at',
+                    name: 'r.created_at',
+                },
+                {
+                    data: 'delete',
+                    name: 'delete',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'download',
+                    name: 'download',
+                    orderable: false,
+                    searchable: false
+                },
+
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 1,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 2,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 3,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 4,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 5,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 6,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: 7,
+                    className: 'dt-body-center'
+                },
+                {
+                    targets: -3,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -2,
+                    className: 'dt-body-center',
+                },
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+
+            ],
+
+        });
         let appeals = $('.yajra-datatable-appeals').DataTable({
             language: {
                 "processing": "Подождите...",

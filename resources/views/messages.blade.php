@@ -80,6 +80,62 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+            <div class="modal fade" id="modal-queue">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Сформировать отчет </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="queue-form" action="{{ route('reports.store') }}"
+                                  method="post">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="queue-name" class="text-muted">Название отчета:</label>
+                                    <div class="input-group">
+                                        <input id="queue-name" type="text" name="name"
+                                               class="form-control form-control-border border-width-2"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="queue-desc" class="text-muted">Описание отчета:</label>
+                                    <div class="input-group">
+                                        <input id="queue-desc" type="text" name="desc"
+                                               class="form-control form-control-border border-width-2"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                @if(isset($_GET['updated_at']))
+                                    <input type="hidden" name="updated_at"
+                                           value="{{ $_GET['updated_at'] }}">
+                                @endif
+                                @if(isset($_GET['date-range']))
+                                    <input type="hidden" name="date-range"
+                                           value="{{ $_GET['date-range'] }}">
+                                @endif
+                                @if(isset($_GET['status_id']))
+                                    <input type="hidden" name="status_id"
+                                           value="{{ $_GET['status_id'] }}">
+                                @endif
+                                @if(isset($_GET['responsible_id']))
+                                    <input type="hidden" name="responsible_id"
+                                           value="{{ $_GET['responsible_id'] }}">
+                                @endif
+                            </form>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                            <button type="submit" form="queue-form" class="btn btn-primary">Сформировать</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
 
             <!-- Main row -->
             <div class="row">
@@ -98,6 +154,13 @@
                                             {{--                                                    <a href="{{ route('messages.show.all.excel') }}"--}}
                                             {{--                                                       class="btn btn-success"> <i class="far fa-file-excel"></i> Excel</a>--}}
                                             {{--                                                </li>--}}
+
+                                            <li class="nav-item mr-2 mt-2">
+                                                <button type="button" class="btn btn-info float-right"
+                                                        data-toggle="modal" data-target="#modal-queue"><i
+                                                        class="far fa-file-excel"></i> Отчет
+                                                </button>
+                                            </li>
                                             <li class="nav-item mr-2 mt-2">
                                                 <form action="{{ route('messages.show.all.excel') }}"
                                                       method="GET">

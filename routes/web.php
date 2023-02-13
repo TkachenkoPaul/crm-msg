@@ -5,6 +5,7 @@ use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\MessageTypeController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusTypeController;
 use App\Http\Controllers\UserController;
@@ -40,6 +41,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/appeals/list', [AppealController::class, 'datatables'])->name('appeals.list')->middleware('can:view messages');
     Route::get('/appeal/delete/{id}/', [AppealController::class, 'destroy'])->name('appeals.destroy')->middleware('can:delete messages');
     Route::get('/appeal/accept/{id}/', [AppealController::class, 'accept'])->name('appeals.accept')->middleware('can:view messages');
+    Route::prefix('monitor/jobs')->group(function () {
+        Route::queueMonitor();
+    })->middleware('can:view reports');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('can: view reports');
+    Route::get('/reports/list', [ReportController::class, 'datatables'])->name('reports.list')->middleware('can: view reports');
+    Route::get('/reports/delete/{id}', [ReportController::class, 'destroy'])->name('reports.destroy')->middleware('can: delete reports');
+    Route::get('/reports/download/{id}', [ReportController::class, 'download'])->name('reports.download')->middleware('can: view reports');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store')->middleware('can: create reports');
 
 //    Route::get('/messages/operations', [OperationController::class, 'index'])->name('operations.index')->middleware('can:view roles');
 //    Route::get('/messages/operations/list', [OperationController::class, 'datatables'])->name('operations.list')->middleware('can:view roles');

@@ -58,6 +58,7 @@ class MessagesExport implements FromCollection, WithCustomStartCell, WithMapping
             $row->fio,
             $row->address,
             $row->house,
+            $row->phone,
             $row->uid,
         ];
     }

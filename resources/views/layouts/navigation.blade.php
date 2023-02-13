@@ -32,6 +32,14 @@
                         </a>
                     </li>
                 @endcan
+                @can('view reports')
+                    <li class="nav-item">
+                        <a href="{{ route('reports.index') }}" class="nav-link">
+                            <i class="far fa-file-archive nav-icon"></i>
+                            <p>Отчеты</p>
+                        </a>
+                    </li>
+                @endcan
                 @can('view messages')
                     <li class="nav-item">
                         <a href="{{ route('appeals.index') }}" class="nav-link">
