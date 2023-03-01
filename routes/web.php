@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [MessagesController::class, 'index'])->name('messages.index')->middleware('can:view messages');
     Route::get('/messages/list', [MessagesController::class, 'datatables'])->name('messages.list')->middleware('can:view messages');
     Route::get('/message/{id}/', [MessagesController::class, 'show'])->name('messages.show')->middleware('can:view messages');
-    Route::get('/message/export/pdf', [MessagesController::class, 'exportPdf'])->name('messages.show.all.pdf')->middleware('can:create messages');
-    Route::get('/message/export/excel', [MessagesController::class, 'exportExcel'])->name('messages.show.all.excel')->middleware('can:create messages');
+    Route::get('/message/export/pdf', [MessagesController::class, 'exportPdf'])->name('messages.show.all.pdf')->middleware('can:view reports pdf');
+    Route::get('/message/export/excel', [MessagesController::class, 'exportExcel'])->name('messages.show.all.excel')->middleware('can:view reports excel');
     Route::post('/message/import/excel', [MessagesController::class, 'importExcel'])->name('messages.import.excel')->middleware('can:create messages');
     Route::get('/message/{id}/pdf', [MessagesController::class, 'showPdf'])->name('messages.show.pdf')->middleware('can:create messages');
     Route::post('/message/{id}/', [MessagesController::class, 'update'])->name('messages.update')->middleware('can:update messages');
