@@ -7,9 +7,10 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class MessagesExport implements FromCollection, WithCustomStartCell, WithMapping, ShouldAutoSize
+class MessagesExport implements FromCollection, WithCustomStartCell, WithMapping, ShouldAutoSize, WithHeadings
 {
     protected $date;
     protected $status_id;
@@ -29,7 +30,7 @@ class MessagesExport implements FromCollection, WithCustomStartCell, WithMapping
      */
     public function collection(): Collection
     {
-        $messages = Messages::query();
+        $messages = Messages::query()->with('type');
         if (isset($this->date)) {
             $date = explode(' ', $this->date);
             $messages = $messages->whereBetween('closed', [$date[0] . ' 00:00:00', $date[2] . ' 23:59:59']);;
@@ -48,18 +49,48 @@ class MessagesExport implements FromCollection, WithCustomStartCell, WithMapping
 
     public function startCell(): string
     {
-        return 'B2';
+        return 'A1';
+    }
+
+    public function headings(): array
+    {
+        return [
+            '№',
+            'ФИО',
+            'Контактный телефон',
+            'Адрес',
+            'Дом/квартира',
+            'Установка/замена',
+            'Льготная категория',
+            'Дата обращения',
+            'Статус подключения',
+            'ID приемника',
+        ];
     }
 
     public function map($row): array
     {
         return [
-            $row->id,
+            $row->number,
             $row->fio,
+            $row->phone,
             $row->address,
             $row->house,
-            $row->phone,
+            'Установка',
+            $row->type->name,
+            $row->created_at,
+            'Выполнена',
             $row->uid,
         ];
+    }
+
+    public function prepareRows($rows)
+    {
+        $number = 1;
+        foreach ($rows as $row) {
+            $row->number = $number;
+            $number++;
+        }
+        return $rows;
     }
 }
