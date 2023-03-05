@@ -152,70 +152,68 @@
                             </h3>
                             <div class="card-tools">
                                 <ul class="nav nav-pills ml-auto">
-                                    @if($data['status'][0]->messages_count >= 1)
-                                        @can('view reports pdf')
-                                            <li class="nav-item mr-2 mt-2">
-                                                <button type="button" class="btn bg-gradient-primary float-right"
-                                                        data-toggle="modal" data-target="#modal-queue"><i
-                                                        class="far fa-file-archive"></i> Отчет
+                                    @can('view reports pdf')
+                                        <li class="nav-item mr-2 mt-2">
+                                            <button type="button" class="btn bg-gradient-primary float-right"
+                                                    data-toggle="modal" data-target="#modal-queue"><i
+                                                    class="far fa-file-archive"></i> Отчет
+                                            </button>
+                                        </li>
+                                    @endcan
+                                    @can('view reports excel')
+                                        <li class="nav-item mr-2 mt-2">
+                                            <form action="{{ route('messages.show.all.excel') }}"
+                                                  method="GET">
+                                                @if(isset($_GET['updated_at']))
+                                                    <input type="hidden" name="updated_at"
+                                                           value="{{ $_GET['updated_at'] }}">
+                                                @endif
+                                                @if(isset($_GET['date-range']))
+                                                    <input type="hidden" name="date-range"
+                                                           value="{{ $_GET['date-range'] }}">
+                                                @endif
+                                                @if(isset($_GET['status_id']))
+                                                    <input type="hidden" name="status_id"
+                                                           value="{{ $_GET['status_id'] }}">
+                                                @endif
+                                                @if(isset($_GET['responsible_id']))
+                                                    <input type="hidden" name="responsible_id"
+                                                           value="{{ $_GET['responsible_id'] }}">
+                                                @endif
+                                                <button type="submit"
+                                                        class="btn  bg-gradient-primary elevation-2"><i
+                                                        class="far fa-file-excel"></i> Excel
                                                 </button>
-                                            </li>
-                                        @endcan
-                                        @can('view reports excel')
-                                            <li class="nav-item mr-2 mt-2">
-                                                <form action="{{ route('messages.show.all.excel') }}"
-                                                      method="GET">
-                                                    @if(isset($_GET['updated_at']))
-                                                        <input type="hidden" name="updated_at"
-                                                               value="{{ $_GET['updated_at'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['date-range']))
-                                                        <input type="hidden" name="date-range"
-                                                               value="{{ $_GET['date-range'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['status_id']))
-                                                        <input type="hidden" name="status_id"
-                                                               value="{{ $_GET['status_id'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['responsible_id']))
-                                                        <input type="hidden" name="responsible_id"
-                                                               value="{{ $_GET['responsible_id'] }}">
-                                                    @endif
-                                                    <button type="submit"
-                                                            class="btn  bg-gradient-primary elevation-2"><i
-                                                            class="far fa-file-excel"></i> Excel
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        @endcan
-                                        @can('view reports pdf')
-                                            <li class="nav-item mr-2 mt-2">
-                                                <form action="{{ route('messages.show.all.pdf') }}"
-                                                      method="GET">
-                                                    @if(isset($_GET['updated_at']))
-                                                        <input type="hidden" name="updated_at"
-                                                               value="{{ $_GET['updated_at'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['date-range']))
-                                                        <input type="hidden" name="date-range"
-                                                               value="{{ $_GET['date-range'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['status_id']))
-                                                        <input type="hidden" name="status_id"
-                                                               value="{{ $_GET['status_id'] }}">
-                                                    @endif
-                                                    @if(isset($_GET['responsible_id']))
-                                                        <input type="hidden" name="responsible_id"
-                                                               value="{{ $_GET['responsible_id'] }}">
-                                                    @endif
-                                                    <button type="submit"
-                                                            class="btn bg-gradient-primary elevation-2"><i
-                                                            class="far fa-file-pdf"></i> Pdf
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        @endcan
-                                    @endif
+                                            </form>
+                                        </li>
+                                    @endcan
+                                    @can('view reports pdf')
+                                        <li class="nav-item mr-2 mt-2">
+                                            <form action="{{ route('messages.show.all.pdf') }}"
+                                                  method="GET">
+                                                @if(isset($_GET['updated_at']))
+                                                    <input type="hidden" name="updated_at"
+                                                           value="{{ $_GET['updated_at'] }}">
+                                                @endif
+                                                @if(isset($_GET['date-range']))
+                                                    <input type="hidden" name="date-range"
+                                                           value="{{ $_GET['date-range'] }}">
+                                                @endif
+                                                @if(isset($_GET['status_id']))
+                                                    <input type="hidden" name="status_id"
+                                                           value="{{ $_GET['status_id'] }}">
+                                                @endif
+                                                @if(isset($_GET['responsible_id']))
+                                                    <input type="hidden" name="responsible_id"
+                                                           value="{{ $_GET['responsible_id'] }}">
+                                                @endif
+                                                <button type="submit"
+                                                        class="btn bg-gradient-primary elevation-2"><i
+                                                        class="far fa-file-pdf"></i> Pdf
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @endcan
                                     @can('create messages')
                                         <li class="nav-item mr-2 mt-2">
                                             <button type="button" class="btn bg-gradient-primary float-right"
